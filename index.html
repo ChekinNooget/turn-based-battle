@@ -66,10 +66,13 @@
             <div class="tile">12</div>
         </div>
     </div>
-    <button onclick="rotateRing(0)">rotate 1</button>
-    <button onclick="rotateRing(1)">rotate 2 </button>
-    <button onclick="rotateRing(2)">rotate 3 </button>
-    <button onclick="rotateRing(3)">rotate 4 </button>
+    <button onclick="playerSwitchModes()">Switch Modes</button>
+    <br>
+    <button onclick="playerSwitchIndex(1)">right</button>
+    <button onclick="playerSwitchIndex(-1)">left</button>
+    <br>
+    <button onclick="playerMoveTiles(true)">shift tiles</button>
+    <button onclick="playerMoveTiles(false)">shift tiles other way</button>
 </body>
 <script type="text/javascript" src="main.js"></script>
 </html>
