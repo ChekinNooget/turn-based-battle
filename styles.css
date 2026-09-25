@@ -1,48 +1,13 @@
 body {
 	color: white;
 }
-.row {
-	width: 50%;
-	aspect-ratio: 1 / 1;
-	background-color: blue;
-	border-radius: 100%;
-	position: relative;
-}
-:nth-child(1) {
-	--nth-child: 1;
-}
-:nth-child(2) {
-	--nth-child: 2;
-}
-:nth-child(3) {
-	--nth-child: 3;
-}
-:nth-child(4) {
-	--nth-child: 4;
-}
-:nth-child(5) {
-	--nth-child: 5;
-}
-:nth-child(6) {
-	--nth-child: 6;
-}
-:nth-child(7) {
-	--nth-child: 7;
-}
-:nth-child(8) {
-	--nth-child: 8;
-}
-:nth-child(9) {
-	--nth-child: 9;
-}
-:nth-child(10) {
-	--nth-child: 10;
-}
-:nth-child(11) {
-	--nth-child: 11;
-}
-:nth-child(12) {
-	--nth-child: 12;
+
+#grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 500px;
 }
 
 .tile {
@@ -58,11 +23,6 @@ body {
 	height: 10%;
 	background-color: black;
 	border-radius: 100%;
-	transform: rotate(calc((var(--nth-child) + 6) * calc(360 / 12) * 1deg)) translateY(400%) rotate(calc((var(--nth-child) + 6) * calc(360 / 12) * -1deg));
 
 	transition: 0.2s;
-}
-
-.row:hover .tile {
-	transform: rotate(calc((var(--nth-child) + 7) * calc(360 / 12) * 1deg)) translateY(400%) rotate(calc((var(--nth-child) + 7) * calc(360 / 12) * -1deg));
 }

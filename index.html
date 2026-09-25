@@ -5,9 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>turn based battles</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="rows.css">
 </head>
-<body>
-    <div class="grid">
+<body onload="setupStart()">
+    <div id="grid">
+        <div class="row">
+            <div class="tile">1</div>
+            <div class="tile">2</div>
+            <div class="tile">3</div>
+            <div class="tile">4</div>
+            <div class="tile">5</div>
+            <div class="tile">6</div>
+            <div class="tile">7</div>
+            <div class="tile">8</div>
+            <div class="tile">9</div>
+            <div class="tile">10</div>
+            <div class="tile">11</div>
+            <div class="tile">12</div>
+        </div>
+        <div class="row">
+            <div class="tile">1</div>
+            <div class="tile">2</div>
+            <div class="tile">3</div>
+            <div class="tile">4</div>
+            <div class="tile">5</div>
+            <div class="tile">6</div>
+            <div class="tile">7</div>
+            <div class="tile">8</div>
+            <div class="tile">9</div>
+            <div class="tile">10</div>
+            <div class="tile">11</div>
+            <div class="tile">12</div>
+        </div>
+        <div class="row">
+            <div class="tile">1</div>
+            <div class="tile">2</div>
+            <div class="tile">3</div>
+            <div class="tile">4</div>
+            <div class="tile">5</div>
+            <div class="tile">6</div>
+            <div class="tile">7</div>
+            <div class="tile">8</div>
+            <div class="tile">9</div>
+            <div class="tile">10</div>
+            <div class="tile">11</div>
+            <div class="tile">12</div>
+        </div>
         <div class="row">
             <div class="tile">1</div>
             <div class="tile">2</div>
@@ -23,7 +66,10 @@
             <div class="tile">12</div>
         </div>
     </div>
-    <button onclick="rotateRing()">rotate</button>
+    <button onclick="rotateRing(0)">rotate 1</button>
+    <button onclick="rotateRing(1)">rotate 2 </button>
+    <button onclick="rotateRing(2)">rotate 3 </button>
+    <button onclick="rotateRing(3)">rotate 4 </button>
 </body>
 <script type="text/javascript" src="main.js"></script>
 </html>
