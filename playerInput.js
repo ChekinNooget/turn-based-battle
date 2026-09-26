@@ -44,17 +44,17 @@ document.body.addEventListener("keydown", (e) => {
 		e.preventDefault();
 	}
 
-	console.log(playerSlidingIndex);
+    console.log(previousMoves)
 });
 
 function playerUndo() {
 	if (playerIsSelecting) {
 		if (previousMoves.length > 1) {
-			tilesArray = previousMoves[previousMoves.length - 2].slice();
+			tilesArray = previousMoves.slice()[previousMoves.length - 2].slice();
 			previousMoves.pop();
 		}
 	} else {
-		tilesArray = previousMoves[previousMoves.length - 1].slice();
+		tilesArray = previousMoves.slice()[previousMoves.length - 1].slice();
 		playerIsSelecting = true;
 	}
 

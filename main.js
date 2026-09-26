@@ -4,10 +4,18 @@
 //rotating a row just slides the row
 var tilesArray = [
 	[false, false, false, false, false, "O", false, false, false, false, false, false], //innermost ring
-	["X", "X", "X", "X", "X", "O", "X", "X", "X", "X", "X", "X"],
-	[false, false, false, false, false, "O", "X", false, false, false, false, false],
-	[false, false, false, false, false, "O", "X", false, false, false, false, false], //outermost ring
+	[false, false, false, false, false, "O", false, false, false, false, false, false],
+	[false, false, false, false, false, "O", false, false, "X", false, false, false],
+	[false, false, false, false, false, "O", false, false, "X", false, false, false], //outermost ring
 ];
+
+for (let i = 0; i < tilesArray.length; i++) {
+	for (let j = 0; j < tilesArray[i].length; j++) {
+		if (tilesArray[i][j] == false) {
+			tilesArray[i][j] = "";
+		}
+	}
+}
 
 function getTransformCSS(ringIndex, index) {
 	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) translateY(${75 * ringIndex + 175}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
@@ -97,7 +105,7 @@ function shiftColumn(columnIndex, direction = true) {
 	if (!direction) {
 		columnIndex = (columnIndex + 6) % 12;
 	}
-        
+
 	var newTempColumn1 = getColumn(columnIndex);
 	var newTempColumn2 = getColumn((columnIndex + 6) % 12);
 
