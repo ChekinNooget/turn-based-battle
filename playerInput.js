@@ -1,6 +1,5 @@
 //undo stuff
 var previousMoves = [];
-previousMoves.push(tilesArray.slice());
 
 //true is rotation, false is sliding
 var playerMode = true;
@@ -10,17 +9,8 @@ var playerIsSelecting = true;
 var playerRotationIndex = 0;
 var playerSlidingIndex = 0;
 
-function logMessage(message) {
-	//console.log(`${message}\n`);
-}
-
+//wait for key presses
 document.body.addEventListener("keydown", (e) => {
-	if (!e.repeat) {
-		logMessage(`Key "${e.key}" pressed [event: keydown]`);
-	} else {
-		logMessage(`Key "${e.key}" repeating [event: keydown]`);
-	}
-
 	if (e.key == "ArrowLeft") {
 		playerSwitchIndex(-1, e.key);
 		e.preventDefault();
@@ -43,18 +33,17 @@ document.body.addEventListener("keydown", (e) => {
 		playerUndo();
 		e.preventDefault();
 	}
-
-    console.log(previousMoves)
 });
 
 function playerUndo() {
+    //undoes the past move by returning to the previous board state, then deleting the latest move.
 	if (playerIsSelecting) {
 		if (previousMoves.length > 1) {
-			tilesArray = previousMoves.slice()[previousMoves.length - 2].slice();
+			tilesArray = structuredClone(previousMoves[previousMoves.length - 2]);
 			previousMoves.pop();
 		}
-	} else {
-		tilesArray = previousMoves.slice()[previousMoves.length - 1].slice();
+	} else { //unless the player is in the middle of a move, in which case, cancel the current move and don't delete
+		tilesArray = structuredClone(previousMoves[previousMoves.length - 1]);
 		playerIsSelecting = true;
 	}
 
@@ -65,6 +54,7 @@ function playerUndo() {
 	document.activeElement = document.getElementById("grid");
 }
 
+//swap from rings to columns and vice versa
 function playerSwitchModes() {
 	playerMode = !playerMode;
 
@@ -74,12 +64,13 @@ function playerSwitchModes() {
 	document.activeElement = document.getElementById("grid");
 }
 
+//on confirm, either choose a certain ring/column to start changing, or finish a move
 function playerConfirm() {
 	if (playerIsSelecting) {
 		playerIsSelecting = false;
 	} else {
 		playerIsSelecting = true;
-		previousMoves.push(tilesArray.slice());
+		previousMoves.push(structuredClone(tilesArray));
 	}
 
 	updateTargetedTilesCSS();
@@ -88,6 +79,7 @@ function playerConfirm() {
 	document.activeElement = document.getElementById("grid");
 }
 
+//either switch which row/column to target, or shift the tiles.
 function playerSwitchIndex(indexChange = 1, key = "ArrowLeft") {
 	if (playerIsSelecting) {
 		if (playerMode) {
@@ -110,16 +102,17 @@ function playerSwitchIndex(indexChange = 1, key = "ArrowLeft") {
 			if (0 <= playerSlidingIndex && playerSlidingIndex <= 5) {
 				direction = !direction;
 			}
-            //utter spaghetti. im sorry
-            //it's so that left inputs always shift the column left and so on
+			//utter spaghetti. im sorry
+			//it's so that left inputs always shift the column left and so on
+            //trust the process frfr
 			if (key == "ArrowUp" || key == "ArrowDown") {
 				if (9 <= playerSlidingIndex && playerSlidingIndex <= 11) {
 					direction = !direction;
 				}
-                
-                if (3 <= playerSlidingIndex && playerSlidingIndex <= 5) {
-                    direction = !direction;
-                }
+
+				if (3 <= playerSlidingIndex && playerSlidingIndex <= 5) {
+					direction = !direction;
+				}
 			}
 			shiftColumn(playerSlidingIndex, direction);
 		}
@@ -131,17 +124,7 @@ function playerSwitchIndex(indexChange = 1, key = "ArrowLeft") {
 	document.activeElement = document.getElementById("grid");
 }
 
-function playerMoveTiles(direction = true) {
-	if (playerMode) {
-		rotateRing(playerRotationIndex, direction);
-	} else {
-		shiftColumn(playerSlidingIndex, direction);
-	}
-
-	document.getElementById("grid").focus();
-	document.activeElement = document.getElementById("grid");
-}
-
+//this changes the background colors of selected tiles
 function updateTargetedTilesCSS() {
 	var grid = document.getElementById("grid");
 	for (let i = 0; i < tilesArray.length; i++) {
@@ -160,20 +143,23 @@ function updateTargetedTilesCSS() {
 
 	if (playerMode) {
 		var tileNodes = document.getElementsByClassName("row")[playerRotationIndex].children;
-		for (let i = 0; i < tileNodes.length; i++) {
-			tileNodes[i].style.backgroundColor = tileColor;
-		}
 	} else {
 		var tileNodes = [];
 		for (let i = 0; i < 4; i++) {
 			tileNodes.push(grid.children[i].children[playerSlidingIndex]);
 			tileNodes.push(grid.children[i].children[(playerSlidingIndex + 6) % 12]);
 		}
+	}
 
-		for (let i = 0; i < tileNodes.length; i++) {
-			tileNodes[i].style.backgroundColor = tileColor;
-		}
+	for (let i = 0; i < tileNodes.length; i++) {
+		tileNodes[i].style.backgroundColor = tileColor;
 	}
 }
 
-updateTargetedTilesCSS();
+//on start, put the initial board state in the undo list
+function initializerPlayerInput() {
+	previousMoves.push(structuredClone(tilesArray));
+	updateTargetedTilesCSS();
+}
+
+initializerPlayerInput();

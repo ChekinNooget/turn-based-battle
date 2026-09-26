@@ -5,10 +5,11 @@
 var tilesArray = [
 	[false, false, false, false, false, "O", false, false, false, false, false, false], //innermost ring
 	[false, false, false, false, false, "O", false, false, false, false, false, false],
-	[false, false, false, false, false, "O", false, false, "X", false, false, false],
-	[false, false, false, false, false, "O", false, false, "X", false, false, false], //outermost ring
+	[false, false, false, false, false, "O", false, false, "X", "X", false, false],
+	[false, false, false, false, false, "O", false, false, "X", "X", false, false], //outermost ring
 ];
 
+//replace all falses with empty strings. probably remove this at some point
 for (let i = 0; i < tilesArray.length; i++) {
 	for (let j = 0; j < tilesArray[i].length; j++) {
 		if (tilesArray[i][j] == false) {
@@ -17,17 +18,22 @@ for (let i = 0; i < tilesArray.length; i++) {
 	}
 }
 
+//the css that is applied to the tiles in order to get them in a ring
+//ringIndex is which ring to target, and index is the tile of that ring.
+//it works by rotating each 
 function getTransformCSS(ringIndex, index) {
 	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) translateY(${75 * ringIndex + 175}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
 }
 
 //direction = true is clockwise, false is counterclockwise
 var rotationTimeout;
+//how off each ring is from the inital rotation point.
 var rotateOffsets = [7, 7, 7, 7];
-var newTransform = "";
+
 function rotateRing(ringIndex, direction = true) {
 	//change the array
 
+    //change which direction to spin the ring based on the direction that was inputted
 	if (direction) {
 		rotateOffsets[ringIndex]++;
 	} else {
@@ -36,6 +42,7 @@ function rotateRing(ringIndex, direction = true) {
 
 	var newTempRing = tilesArray[ringIndex].slice();
 
+    //whichever way it is, shift all of the elements in that array over by one.
 	if (direction) {
 		for (let i = 0; i < tilesArray[ringIndex].length; i++) {
 			if (i == 0) {
@@ -59,9 +66,7 @@ function rotateRing(ringIndex, direction = true) {
 	var tileNodes = document.getElementsByClassName("row")[ringIndex].children;
 	for (let i = 0; i < tileNodes.length; i++) {
 		tileNodes[i].style.transition = "0.2s";
-		newTransform = getTransformCSS(ringIndex, i);
-
-		tileNodes[i].style.transform = newTransform;
+		tileNodes[i].style.transform = getTransformCSS(ringIndex, i);
 	}
 
 	//set this to whatever the transition time is
@@ -70,6 +75,7 @@ function rotateRing(ringIndex, direction = true) {
 	rotationTimeout = setTimeout(resetRotation, 200);
 }
 
+//get every row's tile back to its original rotation, and update the text correspondingly
 function resetRotation() {
 	updateTileText();
 
@@ -79,8 +85,7 @@ function resetRotation() {
 		var tileNodes = document.getElementsByClassName("row")[j].children;
 		for (let i = 0; i < tileNodes.length; i++) {
 			tileNodes[i].style.transition = "0s";
-			newTransform = getTransformCSS(j, i);
-			tileNodes[i].style.transform = newTransform;
+			tileNodes[i].style.transform = getTransformCSS(j, i);
 		}
 	}
 }
@@ -89,14 +94,9 @@ function resetRotation() {
 function getColumn(columnIndex) {
 	var newColumn = [];
 	for (let i = 0; i < 4; i++) {
-		newColumn.push(tilesArray[i][columnIndex]);
+		newColumn.push(tilesArray.slice()[i][columnIndex]);
 	}
-	return newColumn.slice();
-}
-function setColumn(columnIndex, newColumn) {
-	for (let i = 0; i < 4; i++) {
-		tilesArray[i][columnIndex] = newColumn[i];
-	}
+	return newColumn;
 }
 
 function shiftColumn(columnIndex, direction = true) {
@@ -109,9 +109,10 @@ function shiftColumn(columnIndex, direction = true) {
 	var newTempColumn1 = getColumn(columnIndex);
 	var newTempColumn2 = getColumn((columnIndex + 6) % 12);
 
-	var pushedTile1 = newTempColumn1[0];
-	var pushedTile2 = newTempColumn2[3];
+	var pushedTile1 = newTempColumn1.slice()[0];
+	var pushedTile2 = newTempColumn2.slice()[3];
 
+    //handle the first column first, move everything over, and pull the extra one from the other column
 	for (let i = 0; i < newTempColumn1.length; i++) {
 		if (i == 3) {
 			newTempColumn1[i] = pushedTile2;
@@ -119,7 +120,7 @@ function shiftColumn(columnIndex, direction = true) {
 			newTempColumn1[i] = newTempColumn1[i + 1];
 		}
 	}
-
+    //second column, same thing
 	for (let i = newTempColumn2.length - 1; i >= 0; i--) {
 		if (i == 0) {
 			newTempColumn2[i] = pushedTile1;
@@ -128,30 +129,29 @@ function shiftColumn(columnIndex, direction = true) {
 		}
 	}
 
-	setColumn(columnIndex, newTempColumn1);
-	setColumn((columnIndex + 6) % 12, newTempColumn2);
-
+    //replace the original array with the columns
+	for (let i = 0; i < 4; i++) {
+		tilesArray[i][columnIndex] = newTempColumn1[i];
+	}
+	for (let i = 0; i < 4; i++) {
+		tilesArray[i][(columnIndex + 6) % 12] = newTempColumn2[i];
+	}
 	//animation below here
-
+    
 	updateTileText();
 }
 
+//update every tile with its text
 function updateTileText() {
 	var grid = document.getElementById("grid");
 	for (let i = 0; i < tilesArray.length; i++) {
 		for (let j = 0; j < tilesArray[i].length; j++) {
 			grid.children[i].children[j].textContent = tilesArray[i][j];
-			//console.log(grid.children[i].children[j]);
 		}
 	}
 }
 
 function setupStart() {
-	//jank in order to get the rings to look right on first load
-	for (let i = 0; i < 4; i++) {
-		rotateRing(i, true);
-		rotateRing(i, false);
-	}
 	updateTileText();
 	resetRotation();
 }
