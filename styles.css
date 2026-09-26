@@ -27,3 +27,8 @@ body {
 
 	transition: 0.2s;
 }
+
+.fake-button{
+    background-color: grey;
+    width: 100px;
+}

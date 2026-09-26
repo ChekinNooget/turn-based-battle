@@ -1,78 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>turn based battles</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" type="text/css" href="rows.css">
-</head>
-<body onload="setupStart()">
-    <div id="grid">
-        <div class="row">
-            <div class="tile">1</div>
-            <div class="tile">2</div>
-            <div class="tile">3</div>
-            <div class="tile">4</div>
-            <div class="tile">5</div>
-            <div class="tile">6</div>
-            <div class="tile">7</div>
-            <div class="tile">8</div>
-            <div class="tile">9</div>
-            <div class="tile">10</div>
-            <div class="tile">11</div>
-            <div class="tile">12</div>
-        </div>
-        <div class="row">
-            <div class="tile">1</div>
-            <div class="tile">2</div>
-            <div class="tile">3</div>
-            <div class="tile">4</div>
-            <div class="tile">5</div>
-            <div class="tile">6</div>
-            <div class="tile">7</div>
-            <div class="tile">8</div>
-            <div class="tile">9</div>
-            <div class="tile">10</div>
-            <div class="tile">11</div>
-            <div class="tile">12</div>
-        </div>
-        <div class="row">
-            <div class="tile">1</div>
-            <div class="tile">2</div>
-            <div class="tile">3</div>
-            <div class="tile">4</div>
-            <div class="tile">5</div>
-            <div class="tile">6</div>
-            <div class="tile">7</div>
-            <div class="tile">8</div>
-            <div class="tile">9</div>
-            <div class="tile">10</div>
-            <div class="tile">11</div>
-            <div class="tile">12</div>
-        </div>
-        <div class="row">
-            <div class="tile">1</div>
-            <div class="tile">2</div>
-            <div class="tile">3</div>
-            <div class="tile">4</div>
-            <div class="tile">5</div>
-            <div class="tile">6</div>
-            <div class="tile">7</div>
-            <div class="tile">8</div>
-            <div class="tile">9</div>
-            <div class="tile">10</div>
-            <div class="tile">11</div>
-            <div class="tile">12</div>
-        </div>
-    </div>
-    <button onclick="playerSwitchModes()">Switch Modes</button>
-    <br>
-    <button onclick="playerSwitchIndex(1)">right</button>
-    <button onclick="playerSwitchIndex(-1)">left</button>
-    <br>
-    <button onclick="playerMoveTiles(true)">shift tiles</button>
-    <button onclick="playerMoveTiles(false)">shift tiles other way</button>
-</body>
-<script type="text/javascript" src="main.js"></script>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>turn based battles</title>
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+		<link rel="stylesheet" type="text/css" href="rows.css" />
+	</head>
+	<body onload="setupStart()">
+		<div id="grid">
+			<div class="row">
+				<div class="tile">1</div>
+				<div class="tile">2</div>
+				<div class="tile">3</div>
+				<div class="tile">4</div>
+				<div class="tile">5</div>
+				<div class="tile">6</div>
+				<div class="tile">7</div>
+				<div class="tile">8</div>
+				<div class="tile">9</div>
+				<div class="tile">10</div>
+				<div class="tile">11</div>
+				<div class="tile">12</div>
+			</div>
+			<div class="row">
+				<div class="tile">1</div>
+				<div class="tile">2</div>
+				<div class="tile">3</div>
+				<div class="tile">4</div>
+				<div class="tile">5</div>
+				<div class="tile">6</div>
+				<div class="tile">7</div>
+				<div class="tile">8</div>
+				<div class="tile">9</div>
+				<div class="tile">10</div>
+				<div class="tile">11</div>
+				<div class="tile">12</div>
+			</div>
+			<div class="row">
+				<div class="tile">1</div>
+				<div class="tile">2</div>
+				<div class="tile">3</div>
+				<div class="tile">4</div>
+				<div class="tile">5</div>
+				<div class="tile">6</div>
+				<div class="tile">7</div>
+				<div class="tile">8</div>
+				<div class="tile">9</div>
+				<div class="tile">10</div>
+				<div class="tile">11</div>
+				<div class="tile">12</div>
+			</div>
+			<div class="row">
+				<div class="tile">1</div>
+				<div class="tile">2</div>
+				<div class="tile">3</div>
+				<div class="tile">4</div>
+				<div class="tile">5</div>
+				<div class="tile">6</div>
+				<div class="tile">7</div>
+				<div class="tile">8</div>
+				<div class="tile">9</div>
+				<div class="tile">10</div>
+				<div class="tile">11</div>
+				<div class="tile">12</div>
+			</div>
+		</div>
+		<div class="fake-button" onclick="playerSwitchModes()">Switch Modes (x)</div>
+		<br />
+		<div class="fake-button" onclick="playerSwitchIndex(1)">right (right, up)</div>
+		<div class="fake-button" onclick="playerSwitchIndex(-1)">left (left, down)</div>
+		<br />
+		<div class="fake-button" onclick="playerConfirm()">Confirm (space)</div>
+		<br />
+		<div class="fake-button" onclick="playerUndo()">Undo (z)</div>
+	</body>
+	<script type="text/javascript" src="main.js"></script>
+	<script type="text/javascript" src="playerInput.js"></script>
 </html>

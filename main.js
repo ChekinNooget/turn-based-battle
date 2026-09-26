@@ -4,68 +4,13 @@
 //rotating a row just slides the row
 var tilesArray = [
 	[false, false, false, false, false, "O", false, false, false, false, false, false], //innermost ring
-	[false, false, false, false, false, "O", "X", false, false, false, false, false],
+	["X", "X", "X", "X", "X", "O", "X", "X", "X", "X", "X", "X"],
 	[false, false, false, false, false, "O", "X", false, false, false, false, false],
 	[false, false, false, false, false, "O", "X", false, false, false, false, false], //outermost ring
 ];
 
-//true is rotation, false is sliding
-var playerMode = true;
-//which index of each mode the player has selected
-var playerRotationIndex = 0;
-var playerSlidingIndex = 0;
-
-function playerSwitchModes() {
-	playerMode = !playerMode;
-
-    updateTargetedTilesCSS();
-}
-
-function playerSwitchIndex(indexChange = 1) {
-	if (playerMode) {
-		//4 different rows, account for negative numbers
-		playerRotationIndex = (((playerRotationIndex + indexChange) % 4) + 4) % 4;
-	} else {
-		//12 different columns, account for negative numbers
-		playerSlidingIndex = (((playerSlidingIndex + indexChange) % 12) + 12) % 12;
-	}
-
-    updateTargetedTilesCSS();
-}
-
-function playerMoveTiles(direction = true) {
-	if (playerMode) {
-		rotateRing(playerRotationIndex, direction);
-	} else {
-		shiftColumn(playerSlidingIndex, direction);
-	}
-}
-
-function updateTargetedTilesCSS() {
-	var grid = document.getElementById("grid");
-	for (let i = 0; i < tilesArray.length; i++) {
-		for (let j = 0; j < tilesArray[i].length; j++) {
-			grid.children[i].children[j].style.backgroundColor = "black";
-			//console.log(grid.children[i].children[j]);
-		}
-	}
-
-	if (playerMode) {
-        var tileNodes = document.getElementsByClassName("row")[playerRotationIndex].children;
-        for (let i = 0; i < tileNodes.length; i++) {
-            tileNodes[i].style.backgroundColor = "red";
-        }
-	} else {
-        var tileNodes = []
-        for (let i = 0; i < 4; i++) {
-            tileNodes.push(grid.children[i].children[playerSlidingIndex])
-            tileNodes.push(grid.children[i].children[(playerSlidingIndex + 6) % 12])
-        }
-        
-        for (let i = 0; i < tileNodes.length; i++) {
-            tileNodes[i].style.backgroundColor = "red";
-        }
-	}
+function getTransformCSS(ringIndex, index) {
+	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) translateY(${75 * ringIndex + 175}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
 }
 
 //direction = true is clockwise, false is counterclockwise
@@ -106,7 +51,7 @@ function rotateRing(ringIndex, direction = true) {
 	var tileNodes = document.getElementsByClassName("row")[ringIndex].children;
 	for (let i = 0; i < tileNodes.length; i++) {
 		tileNodes[i].style.transition = "0.2s";
-		newTransform = `rotateZ(${((rotateOffsets[ringIndex] + i) * 360) / 12}deg) translateY(${75 * ringIndex + 175}px) rotateZ(-${((rotateOffsets[ringIndex] + i) * 360) / 12}deg)`;
+		newTransform = getTransformCSS(ringIndex, i);
 
 		tileNodes[i].style.transform = newTransform;
 	}
@@ -126,7 +71,7 @@ function resetRotation() {
 		var tileNodes = document.getElementsByClassName("row")[j].children;
 		for (let i = 0; i < tileNodes.length; i++) {
 			tileNodes[i].style.transition = "0s";
-			newTransform = `rotateZ(${((rotateOffsets[j] + i) * 360) / 12}deg) translateY(${75 * j + 175}px) rotateZ(-${((rotateOffsets[j] + i) * 360) / 12}deg)`;
+			newTransform = getTransformCSS(j, i);
 			tileNodes[i].style.transform = newTransform;
 		}
 	}
@@ -152,7 +97,7 @@ function shiftColumn(columnIndex, direction = true) {
 	if (!direction) {
 		columnIndex = (columnIndex + 6) % 12;
 	}
-
+        
 	var newTempColumn1 = getColumn(columnIndex);
 	var newTempColumn2 = getColumn((columnIndex + 6) % 12);
 
@@ -194,8 +139,10 @@ function updateTileText() {
 }
 
 function setupStart() {
+	//jank in order to get the rings to look right on first load
 	for (let i = 0; i < 4; i++) {
-		rotateRing(i);
+		rotateRing(i, true);
+		rotateRing(i, false);
 	}
 	updateTileText();
 	resetRotation();
