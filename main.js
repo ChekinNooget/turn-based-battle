@@ -31,13 +31,15 @@ for (let i = 0; i < tilesArray.length; i++) {
 //ringIndex is which ring to target, and index is the tile of that ring.
 //it works by rotating each
 function getTransformCSS(ringIndex, index) {
-	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) translateY(${75 * ringIndex + 175}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
+	const effectiveIndex = (ringIndex + (index >= 6 ? 7 : 1) * shiftOffsets[index % 6]) % 8;
+	console.log(effectiveIndex);
+	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) translateY(${75 * effectiveIndex + (effectiveIndex >= 4 ? -700 : 175)}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
 }
 
 //direction = true is clockwise, false is counterclockwise
-var rotationTimeout;
+var animationTimeout;
 //how off each ring is from the inital rotation point.
-var rotateOffsets = [7, 7, 7, 7];
+var rotateOffsets = [7, 7, 7, 7], shiftOffsets = [0, 0, 0, 0, 0, 0];
 
 function rotateRing(ringIndex, direction = true) {
 	//change the array
@@ -80,15 +82,16 @@ function rotateRing(ringIndex, direction = true) {
 
 	//set this to whatever the transition time is
 	//clear timeout in case you're spamming the button
-	clearTimeout(rotationTimeout);
-	rotationTimeout = setTimeout(resetRotation, 200);
+	clearTimeout(animationTimeout);
+	animationTimeout = setTimeout(resetAnimation, 200);
 }
 
 //get every row's tile back to its original rotation, and update the text correspondingly
-function resetRotation() {
+function resetAnimation() {
 	updateTileText();
 
 	rotateOffsets = [7, 7, 7, 7];
+	shiftOffsets = [0, 0, 0, 0, 0, 0];
 
 	for (let j = 0; j < 4; j++) {
 		var tileNodes = document.getElementsByClassName("row")[j].children;
@@ -114,6 +117,7 @@ function shiftColumn(columnIndex, direction = true) {
 	if (!direction) {
 		columnIndex = (columnIndex + 6) % 12;
 	}
+	shiftOffsets[columnIndex % 6] += columnIndex >= 6 ? 1 : 7;
 
 	var newTempColumn1 = getColumn(columnIndex);
 	var newTempColumn2 = getColumn((columnIndex + 6) % 12);
@@ -146,8 +150,16 @@ function shiftColumn(columnIndex, direction = true) {
 		tilesArray[i][(columnIndex + 6) % 12] = newTempColumn2[i];
 	}
 	//animation below here
-
-	updateTileText();
+	const board = document.getElementsByClassName("row");
+	for (let i = 0; i < board.length; i++) {
+		board[i].children[columnIndex].style.transition = "0.2s";
+		board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
+		board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
+		board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
+	};
+    
+	clearTimeout(animationTimeout);
+	animationTimeout = setTimeout(resetAnimation, 200);
 }
 
 //check if the board is solved
@@ -292,5 +304,5 @@ function updateTileText() {
 
 function setupStart() {
 	updateTileText();
-	resetRotation();
+	resetAnimation();
 }
