@@ -27,19 +27,39 @@ for (let i = 0; i < tilesArray.length; i++) {
 	}
 }
 
+var animationTimeout;
+
+var betweenTilesPadding = 75;
+var tilePaddingStart = 175;
+
 //the css that is applied to the tiles in order to get them in a ring
 //ringIndex is which ring to target, and index is the tile of that ring.
-//it works by rotating each
-function getTransformCSS(ringIndex, index) {
+function getTransformCSS(ringIndex, index, transformOffset = 0) {
 	const effectiveIndex = (ringIndex + (index >= 6 ? 7 : 1) * shiftOffsets[index % 6]) % 8;
-	console.log(effectiveIndex);
-	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) translateY(${75 * effectiveIndex + (effectiveIndex >= 4 ? -700 : 175)}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
+	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) 
+    translateY(${betweenTilesPadding * (effectiveIndex - transformOffset) + (effectiveIndex >= 4 ? -(tilePaddingStart * 4) : tilePaddingStart)}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
+}
+
+//get every row's tile back to its original rotation, and update the text correspondingly
+function resetAnimation() {
+	updateTileText();
+
+	rotateOffsets = [7, 7, 7, 7];
+	shiftOffsets = [0, 0, 0, 0, 0, 0];
+
+	for (let j = 0; j < 4; j++) {
+		var tileNodes = document.getElementsByClassName("row")[j].children;
+		for (let i = 0; i < tileNodes.length; i++) {
+			tileNodes[i].style.transition = "0s";
+			tileNodes[i].style.transform = getTransformCSS(j, i);
+		}
+	}
 }
 
 //direction = true is clockwise, false is counterclockwise
-var animationTimeout;
 //how off each ring is from the inital rotation point.
-var rotateOffsets = [7, 7, 7, 7], shiftOffsets = [0, 0, 0, 0, 0, 0];
+var rotateOffsets = [7, 7, 7, 7],
+	shiftOffsets = [0, 0, 0, 0, 0, 0];
 
 function rotateRing(ringIndex, direction = true) {
 	//change the array
@@ -86,22 +106,6 @@ function rotateRing(ringIndex, direction = true) {
 	animationTimeout = setTimeout(resetAnimation, 200);
 }
 
-//get every row's tile back to its original rotation, and update the text correspondingly
-function resetAnimation() {
-	updateTileText();
-
-	rotateOffsets = [7, 7, 7, 7];
-	shiftOffsets = [0, 0, 0, 0, 0, 0];
-
-	for (let j = 0; j < 4; j++) {
-		var tileNodes = document.getElementsByClassName("row")[j].children;
-		for (let i = 0; i < tileNodes.length; i++) {
-			tileNodes[i].style.transition = "0s";
-			tileNodes[i].style.transform = getTransformCSS(j, i);
-		}
-	}
-}
-
 //returns the column, in order of [innermost ring, awef, awef, outermost ring]
 function getColumn(columnIndex, targetArray = tilesArray) {
 	var newColumn = [];
@@ -119,8 +123,8 @@ function shiftColumn(columnIndex, direction = true) {
 	}
 	shiftOffsets[columnIndex % 6] += columnIndex >= 6 ? 1 : 7;
 
-	var newTempColumn1 = getColumn(columnIndex);
-	var newTempColumn2 = getColumn((columnIndex + 6) % 12);
+	var newTempColumn1 = getColumn(columnIndex); //column pushed towards center
+	var newTempColumn2 = getColumn((columnIndex + 6) % 12); // column pushed towards edge
 
 	var pushedTile1 = newTempColumn1.slice()[0];
 	var pushedTile2 = newTempColumn2.slice()[3];
@@ -133,6 +137,7 @@ function shiftColumn(columnIndex, direction = true) {
 			newTempColumn1[i] = newTempColumn1[i + 1];
 		}
 	}
+
 	//second column, same thing
 	for (let i = newTempColumn2.length - 1; i >= 0; i--) {
 		if (i == 0) {
@@ -149,15 +154,31 @@ function shiftColumn(columnIndex, direction = true) {
 	for (let i = 0; i < 4; i++) {
 		tilesArray[i][(columnIndex + 6) % 12] = newTempColumn2[i];
 	}
+
 	//animation below here
 	const board = document.getElementsByClassName("row");
 	for (let i = 0; i < board.length; i++) {
-		board[i].children[columnIndex].style.transition = "0.2s";
-		board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
-		board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
-		board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
-	};
-    
+		if (i != 3) {
+			//every other tile
+			board[i].children[columnIndex].style.transition = "0.2s";
+			board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
+			board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
+			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
+		} else {
+			//tile pushed towards center (treat as normal)
+			board[i].children[columnIndex].style.transition = "0.2s";
+			board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
+
+			//the outermost tile being pushed towards the edge
+			board[i].children[(columnIndex + 6) % 12].style.transition = "0s";
+			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12, 1);
+			var columnHalfwayTimeout = setTimeout(function () {
+				board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
+				board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
+			}, 0); //idk why a 0 second timeout is needed but whatever
+		}
+	}
+
 	clearTimeout(animationTimeout);
 	animationTimeout = setTimeout(resetAnimation, 200);
 }
@@ -186,7 +207,7 @@ function checkIfSolved() {
 		}
 
 		//if the array contains a non empty element, but one of the first two
-        //  element are empty, then it MUST be unsolved.
+		//  element are empty, then it MUST be unsolved.
 		//return false
 		if (!tempColumnsArray[i].every((val, a, arr) => val == "") && (tempColumnsArray[i][0] == "" || tempColumnsArray[i][1] == "")) {
 			returnArray = [false, false];
@@ -242,13 +263,13 @@ function checkIfSolved() {
 			if (!tempCheckUniqueElements.every((val, a, arr) => val == arr[0])) {
 				returnArray[1] = false;
 			}
-            
-            //set everything empty.
-            tempColumnsArray[i][0] = ""
-            tempColumnsArray[i][1] = ""
-            tempColumnsArray[i + 1][0] = ""
-            tempColumnsArray[i + 1][1] = ""
-            
+
+			//set everything empty.
+			tempColumnsArray[i][0] = "";
+			tempColumnsArray[i][1] = "";
+			tempColumnsArray[i + 1][0] = "";
+			tempColumnsArray[i + 1][1] = "";
+
 			//we already checked the next column so we can skip checking that one again
 			i++;
 		}
@@ -259,7 +280,7 @@ function checkIfSolved() {
 	//  like it from the array
 	//we also need to account for if we already used the first column for a different square,
 	//  which is what tempBeginningEdgeCase is for. we can "drag" the extra unused column of
-    //  tiles if we need to
+	//  tiles if we need to
 
 	tempCheckUniqueElements = [];
 	tempCheckUniqueElements.push(tempColumnsArray[tempBeginningEdgeCase][0]);
@@ -267,18 +288,18 @@ function checkIfSolved() {
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][0]);
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][1]);
 
-    //check if all the tiles are filled
+	//check if all the tiles are filled
 	if (!tempCheckUniqueElements.includes("")) {
-        //again, if the tiles aren't equal, the enemies are mismatched
+		//again, if the tiles aren't equal, the enemies are mismatched
 		if (!tempCheckUniqueElements.every((val, a, arr) => val == arr[0])) {
 			returnArray[1] = false;
 		}
-        
-        //set everything empty
-        tempColumnsArray[tempBeginningEdgeCase][0] = ""
-        tempColumnsArray[tempBeginningEdgeCase][1] = ""
-        tempColumnsArray[tempColumnsArray.length - 1][0] = ""
-        tempColumnsArray[tempColumnsArray.length - 1][1] = ""
+
+		//set everything empty
+		tempColumnsArray[tempBeginningEdgeCase][0] = "";
+		tempColumnsArray[tempBeginningEdgeCase][1] = "";
+		tempColumnsArray[tempColumnsArray.length - 1][0] = "";
+		tempColumnsArray[tempColumnsArray.length - 1][1] = "";
 	}
 
 	//FINAL CHECK: if the entire array is empty, then the board is solved!
@@ -286,7 +307,8 @@ function checkIfSolved() {
 	if (finalArray.every((val, a, arr) => val == "")) {
 		returnArray[0] = true;
 		return returnArray;
-	} else { //otherwise we must have missed something
+	} else {
+		//otherwise we must have missed something
 		returnArray = [false, false];
 		return returnArray;
 	}

@@ -47,7 +47,7 @@ function playerUndo() {
 		playerIsSelecting = true;
 	}
 
-	resetRotation();
+	resetAnimation();
 	updateTargetedTilesCSS();
 
 	document.getElementById("grid").focus();
