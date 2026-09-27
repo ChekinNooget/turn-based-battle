@@ -3,11 +3,20 @@
 //sliding a column should affect the one mod6 ahead of it, but upside down
 //rotating a row just slides the row
 var tilesArray = [
-	[false, false, false, false, false, "O", false, false, false, false, false, false], //innermost ring
-	[false, false, false, false, false, "O", false, false, false, false, false, false],
-	[false, false, false, false, false, "O", false, false, "X", "X", false, false],
-	[false, false, false, false, false, "O", false, false, "X", "X", false, false], //outermost ring
+	[false, false, "A", false, false, false, false, false, false, false, false, "A"], //innermost ring
+	[false, false, "A", false, false, false, false, false, false, false, false, "A"],
+	[false, false, false, false, false, false, false, false, false, false, false, false],
+	[false, false, false, false, false, false, false, false, false, false, false, false], //outermost ring
 ];
+
+/* template all empty array
+var tilesArray = [
+	[false, false, false, false, false, false, false, false, false, false, false, false], //innermost ring
+	[false, false, false, false, false, false, false, false, false, false, false, false],
+	[false, false, false, false, false, false, false, false, false, false, false, false],
+	[false, false, false, false, false, false, false, false, false, false, false, false], //outermost ring
+];
+*/
 
 //replace all falses with empty strings. probably remove this at some point
 for (let i = 0; i < tilesArray.length; i++) {
@@ -20,7 +29,7 @@ for (let i = 0; i < tilesArray.length; i++) {
 
 //the css that is applied to the tiles in order to get them in a ring
 //ringIndex is which ring to target, and index is the tile of that ring.
-//it works by rotating each 
+//it works by rotating each
 function getTransformCSS(ringIndex, index) {
 	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) translateY(${75 * ringIndex + 175}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
 }
@@ -33,7 +42,7 @@ var rotateOffsets = [7, 7, 7, 7];
 function rotateRing(ringIndex, direction = true) {
 	//change the array
 
-    //change which direction to spin the ring based on the direction that was inputted
+	//change which direction to spin the ring based on the direction that was inputted
 	if (direction) {
 		rotateOffsets[ringIndex]++;
 	} else {
@@ -42,7 +51,7 @@ function rotateRing(ringIndex, direction = true) {
 
 	var newTempRing = tilesArray[ringIndex].slice();
 
-    //whichever way it is, shift all of the elements in that array over by one.
+	//whichever way it is, shift all of the elements in that array over by one.
 	if (direction) {
 		for (let i = 0; i < tilesArray[ringIndex].length; i++) {
 			if (i == 0) {
@@ -91,10 +100,10 @@ function resetRotation() {
 }
 
 //returns the column, in order of [innermost ring, awef, awef, outermost ring]
-function getColumn(columnIndex) {
+function getColumn(columnIndex, targetArray = tilesArray) {
 	var newColumn = [];
 	for (let i = 0; i < 4; i++) {
-		newColumn.push(tilesArray.slice()[i][columnIndex]);
+		newColumn.push(targetArray.slice()[i][columnIndex]);
 	}
 	return newColumn;
 }
@@ -112,7 +121,7 @@ function shiftColumn(columnIndex, direction = true) {
 	var pushedTile1 = newTempColumn1.slice()[0];
 	var pushedTile2 = newTempColumn2.slice()[3];
 
-    //handle the first column first, move everything over, and pull the extra one from the other column
+	//handle the first column first, move everything over, and pull the extra one from the other column
 	for (let i = 0; i < newTempColumn1.length; i++) {
 		if (i == 3) {
 			newTempColumn1[i] = pushedTile2;
@@ -120,7 +129,7 @@ function shiftColumn(columnIndex, direction = true) {
 			newTempColumn1[i] = newTempColumn1[i + 1];
 		}
 	}
-    //second column, same thing
+	//second column, same thing
 	for (let i = newTempColumn2.length - 1; i >= 0; i--) {
 		if (i == 0) {
 			newTempColumn2[i] = pushedTile1;
@@ -129,7 +138,7 @@ function shiftColumn(columnIndex, direction = true) {
 		}
 	}
 
-    //replace the original array with the columns
+	//replace the original array with the columns
 	for (let i = 0; i < 4; i++) {
 		tilesArray[i][columnIndex] = newTempColumn1[i];
 	}
@@ -137,8 +146,139 @@ function shiftColumn(columnIndex, direction = true) {
 		tilesArray[i][(columnIndex + 6) % 12] = newTempColumn2[i];
 	}
 	//animation below here
-    
+
 	updateTileText();
+}
+
+//check if the board is solved
+//TODO: "" is the check for an empty tile. rework this maybe?
+//returns [bool:is solved?, bool:is solved with all matching enemies?]
+function checkIfSolved() {
+	var tempCheckedArray = tilesArray.slice();
+	var tempColumnsArray = [];
+
+	var returnArray = [false, true];
+
+	//first pass: get every column
+	for (let i = 0; i < tempCheckedArray[0].length; i++) {
+		tempColumnsArray.push(getColumn(i, tempCheckedArray));
+	}
+
+	//second pass: check for easy failures
+	for (let i = 0; i < tempColumnsArray.length; i++) {
+		//if there's an odd number of elements in a column, the whole board MUST be unsolved.
+		//return false
+		if (tempColumnsArray[i].filter((x) => x != "").length % 2 == 1) {
+			returnArray = [false, false];
+			return returnArray;
+		}
+
+		//if the array contains a non empty element, but the first element is empty, then it MUST be unsolved.
+		//return false
+		if (!tempColumnsArray[i].every((val, a, arr) => val == "") && tempColumnsArray[i][0] == "") {
+			returnArray = [false, false];
+			console.log("empty first");
+			return returnArray;
+		}
+	}
+
+	//now we're checking for correctness
+	//remove all "solved" elements so that at the end, we can check if the list is empty
+
+	//third pass: check for fully filled out columns. (easy
+	for (let i = 0; i < tempColumnsArray.length; i++) {
+		//if all slots are filled: it's a row, so it's good. easy check
+		if (!tempColumnsArray[i].includes("")) {
+			//if all slots aren't equal to each other, there must be a mix of enemies
+			if (!tempColumnsArray[i].every((val, a, arr) => val == arr[0])) {
+				returnArray[1] = false;
+			}
+
+			for (let j = 0; j < tempColumnsArray[i].length; j++) {
+				tempColumnsArray[i][j] = "";
+			}
+		}
+	}
+
+	//keeps track of where there stopped being full squares
+	var tempBeginningEdgeCase = 0;
+	var tempContinueCheckingEdgeCase = true;
+	var tempCheckUniqueElements = [];
+
+	//fourth pass: check for squares
+	//we use length - 1 because we don't want to go out of bounds on the final column
+	for (let i = 0; i < tempColumnsArray.length - 1; i++) {
+		tempCheckUniqueElements = [];
+
+		//these are the four tiles that make a square
+		tempCheckUniqueElements.push(tempColumnsArray[i][0]);
+		tempCheckUniqueElements.push(tempColumnsArray[i][1]);
+		tempCheckUniqueElements.push(tempColumnsArray[i + 1][0]);
+		tempCheckUniqueElements.push(tempColumnsArray[i + 1][1]);
+
+		//if there's an empty element, it can't be a square, so skip
+		if (tempCheckUniqueElements.includes("")) {
+			tempContinueCheckingEdgeCase = false;
+			continue;
+		} else {
+            console.log("not skipped: " + tempCheckUniqueElements)
+			//keep incrementing tempBeginningEdgeCase until the for loop gets skipped by an empty element
+			if (tempContinueCheckingEdgeCase) {
+				tempBeginningEdgeCase = i + 2;
+			}
+
+			//if all slots aren't equal to each other, there must be a mix of enemies
+			if (!tempCheckUniqueElements.every((val, a, arr) => val == arr[0])) {
+				returnArray[1] = false;
+			}
+            
+            //set everything empty. this should also change the original tempColumnsArray
+            for (let j = 0; j < tempCheckUniqueElements.length; j++) {
+                //tempCheckUniqueElements[j] = ""
+            }
+
+            tempColumnsArray[i][0] = ""
+            tempColumnsArray[i][1] = ""
+            tempColumnsArray[i + 1][0] = ""
+            tempColumnsArray[i + 1][1] = ""
+            
+			//we already checked the next column so we can skip checking that one
+			i++;
+		}
+	}
+
+	//check for edge case: if the very first column and the very last column are
+	//  both ["X", "X", "", ""], they make a square, even though it doesn't look
+	//  like it from the array
+	//we also need to account for if we already used the first column for a different square,
+	//  which is what tempBeginningEdgeCase is for
+
+	tempCheckUniqueElements = [];
+	tempCheckUniqueElements.push(tempColumnsArray[tempBeginningEdgeCase][0]);
+	tempCheckUniqueElements.push(tempColumnsArray[tempBeginningEdgeCase][1]);
+	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][0]);
+	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][1]);
+
+	if (!tempCheckUniqueElements.includes("")) {
+		if (!tempCheckUniqueElements.every((val, a, arr) => val == arr[0])) {
+			returnArray[1] = false;
+		}
+        
+        tempColumnsArray[tempBeginningEdgeCase][0] = ""
+        tempColumnsArray[tempBeginningEdgeCase][1] = ""
+        tempColumnsArray[tempColumnsArray.length - 1][0] = ""
+        tempColumnsArray[tempColumnsArray.length - 1][1] = ""
+	}
+
+	//FINAL CHECK: if the entire array is empty, then the board is solved!
+	var finalArray = tempColumnsArray.flat();
+	if (finalArray.every((val, a, arr) => val == "")) {
+		returnArray[0] = true;
+		return returnArray;
+	} else {
+		returnArray = [false, false];
+		return returnArray;
+	}
 }
 
 //update every tile with its text

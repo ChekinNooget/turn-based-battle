@@ -56,7 +56,10 @@ function playerUndo() {
 
 //swap from rings to columns and vice versa
 function playerSwitchModes() {
-	playerMode = !playerMode;
+    //only swap modes if the player isn't currently changing a row or column
+    if (playerIsSelecting) {
+	    playerMode = !playerMode;
+    }
 
 	updateTargetedTilesCSS();
 
@@ -71,6 +74,15 @@ function playerConfirm() {
 	} else {
 		playerIsSelecting = true;
 		previousMoves.push(structuredClone(tilesArray));
+
+        var isSolved = checkIfSolved();
+        if (isSolved[0]) {
+            if (isSolved[1]) {
+                alert("solved perfectly! moves: " + (previousMoves.length - 1))
+            } else {
+                alert("solved with mismatched enemies!" + (previousMoves.length - 1))
+            }
+        }
 	}
 
 	updateTargetedTilesCSS();
