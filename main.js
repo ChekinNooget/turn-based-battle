@@ -173,11 +173,11 @@ function checkIfSolved() {
 			return returnArray;
 		}
 
-		//if the array contains a non empty element, but the first element is empty, then it MUST be unsolved.
+		//if the array contains a non empty element, but one of the first two
+        //  element are empty, then it MUST be unsolved.
 		//return false
-		if (!tempColumnsArray[i].every((val, a, arr) => val == "") && tempColumnsArray[i][0] == "") {
+		if (!tempColumnsArray[i].every((val, a, arr) => val == "") && (tempColumnsArray[i][0] == "" || tempColumnsArray[i][1] == "")) {
 			returnArray = [false, false];
-			console.log("empty first");
 			return returnArray;
 		}
 	}
@@ -221,7 +221,6 @@ function checkIfSolved() {
 			tempContinueCheckingEdgeCase = false;
 			continue;
 		} else {
-            console.log("not skipped: " + tempCheckUniqueElements)
 			//keep incrementing tempBeginningEdgeCase until the for loop gets skipped by an empty element
 			if (tempContinueCheckingEdgeCase) {
 				tempBeginningEdgeCase = i + 2;
@@ -232,17 +231,13 @@ function checkIfSolved() {
 				returnArray[1] = false;
 			}
             
-            //set everything empty. this should also change the original tempColumnsArray
-            for (let j = 0; j < tempCheckUniqueElements.length; j++) {
-                //tempCheckUniqueElements[j] = ""
-            }
-
+            //set everything empty.
             tempColumnsArray[i][0] = ""
             tempColumnsArray[i][1] = ""
             tempColumnsArray[i + 1][0] = ""
             tempColumnsArray[i + 1][1] = ""
             
-			//we already checked the next column so we can skip checking that one
+			//we already checked the next column so we can skip checking that one again
 			i++;
 		}
 	}
@@ -251,7 +246,8 @@ function checkIfSolved() {
 	//  both ["X", "X", "", ""], they make a square, even though it doesn't look
 	//  like it from the array
 	//we also need to account for if we already used the first column for a different square,
-	//  which is what tempBeginningEdgeCase is for
+	//  which is what tempBeginningEdgeCase is for. we can "drag" the extra unused column of
+    //  tiles if we need to
 
 	tempCheckUniqueElements = [];
 	tempCheckUniqueElements.push(tempColumnsArray[tempBeginningEdgeCase][0]);
@@ -259,11 +255,14 @@ function checkIfSolved() {
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][0]);
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][1]);
 
+    //check if all the tiles are filled
 	if (!tempCheckUniqueElements.includes("")) {
+        //again, if the tiles aren't equal, the enemies are mismatched
 		if (!tempCheckUniqueElements.every((val, a, arr) => val == arr[0])) {
 			returnArray[1] = false;
 		}
         
+        //set everything empty
         tempColumnsArray[tempBeginningEdgeCase][0] = ""
         tempColumnsArray[tempBeginningEdgeCase][1] = ""
         tempColumnsArray[tempColumnsArray.length - 1][0] = ""
@@ -275,7 +274,7 @@ function checkIfSolved() {
 	if (finalArray.every((val, a, arr) => val == "")) {
 		returnArray[0] = true;
 		return returnArray;
-	} else {
+	} else { //otherwise we must have missed something
 		returnArray = [false, false];
 		return returnArray;
 	}
