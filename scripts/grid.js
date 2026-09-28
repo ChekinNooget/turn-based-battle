@@ -69,8 +69,8 @@ function getTransformCSS(ringIndex, index, transformOffset = 0) {
 function resetAnimation() {
 	updateTileText();
     
-    betweenTilesPadding = Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight - 200)/12;
-    tilePaddingStart = Math.min(document.documentElement.clientWidth, document.documentElement.clientHeight - 200)/8;
+    betweenTilesPadding = Math.min(document.documentElement.clientWidth - 100, document.documentElement.clientHeight - 250)/10;
+    tilePaddingStart = Math.min(document.documentElement.clientWidth - 100, document.documentElement.clientHeight - 250)/5;
 
 	rotateOffsets = [7, 7, 7, 7];
 	shiftOffsets = [0, 0, 0, 0, 0, 0];
