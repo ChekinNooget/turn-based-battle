@@ -76,14 +76,17 @@ function playerConfirm() {
 		playerIsSelecting = true;
 		previousMoves.push(structuredClone(tilesArray));
 
+        //TODO: player moves is updated here. tweak this eventually to move it somewhere else
 		var isSolved = checkIfSolved();
 		if (isSolved[0]) {
 			if (isSolved[1]) {
-				alert("solved perfectly! moves: " + (previousMoves.length - 1));
+				document.getElementById("move-count").textContent = "Solved! Move Count: " + (previousMoves.length - 1).toString();
 			} else {
-				alert("solved with mismatched enemies!" + (previousMoves.length - 1));
+				document.getElementById("move-count").textContent = "Solved with mismatches! Move Count: " + (previousMoves.length - 1).toString();
 			}
-		}
+		} else {
+	        document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
+        }
 	}
 
 	updateTargetedTilesCSS();
@@ -171,6 +174,7 @@ function updateTargetedTilesCSS() {
 function initializerPlayerInput() {
 	previousMoves.push(structuredClone(tilesArray));
 	updateTargetedTilesCSS();
+    document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
 }
 
 initializerPlayerInput();

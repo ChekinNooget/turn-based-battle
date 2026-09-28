@@ -7,9 +7,35 @@
 		<link rel="stylesheet" type="text/css" href="styles/global.css" />
 		<link rel="stylesheet" type="text/css" href="styles/styles.css" />
 		<link rel="stylesheet" type="text/css" href="styles/rows.css" />
+		<link rel="stylesheet" type="text/css" href="styles/overlays.css" />
+		<link rel="stylesheet" type="text/css" href="styles/header.css" />
 	</head>
 	<body onload="setupStart()">
-		<div id="header">owaiefaowe</div>
+		<div id="header">
+			<div id="header-left-side">
+				<div>Cool Header</div>
+				<div id="move-count">999</div>
+			</div>
+			<div id="header-right-side">
+				<div id="tutorial-button" onclick="openOverlay('tutorial')"></div>
+			</div>
+		</div>
+		<div id="dark-background" onclick="closeOverlay()"></div>
+		<div id="overlay">
+			<div id="all-overlays">
+				<div class="tutorial-overlay">
+					<h1>Line them up!</h1>
+					<p>The goal of each puzzle is to create lineups that sort the enemies into two kinds of groups: <span class="bold">squares, or lines</span>.</p>
+					<img src="/assets/sprites/tutorial/temp square screenshot.png" />
+					<img src="/assets/sprites/tutorial/temp line screenshot.png" />
+					<p>Move enemies around by <span class="bold">rotating rings</span>, or by <span class="bold">sliding rows.</span></p>
+					<!--Note: in the code we called them "shifting columns," but apparently in-game it's called "sliding rows." Oops. We also called "rotating rings" "rotating rows" so hopefully that isn't confusing.-->
+					<p>Switch between moving rings or columns by pressing <span class="bold">X</span>. Once you've got a ring or row you'd like to change, press <span class="bold">Space</span> to select it. After that, use your <span class="bold">Arrow Keys</span> to move them around. Press <span class="bold">Space</span> again to confirm your move, and you're done! You can also press <span class="bold">Z</span> to undo.</p>
+					<p>Try to sort all of the enemies in as few moves as possible! (Or not, I don't care.)</p>
+				</div>
+			</div>
+			<button id="close-overlay-button" onclick="closeOverlay();">Close overlay</button>
+		</div>
 		<div id="main">
 			<div id="grid">
 				<div class="row">
@@ -72,12 +98,12 @@
 		</div>
 		<div id="footer">
 			<div class="fake-button" onclick="playerSwitchModes()">Switch Modes (x)</div>
-			
+
 			<div class="fake-button" onclick="playerSwitchIndex(1)">right (right, up)</div>
 			<div class="fake-button" onclick="playerSwitchIndex(-1)">left (left, down)</div>
-			
+
 			<div class="fake-button" onclick="playerConfirm()">Confirm (space)</div>
-			
+
 			<div class="fake-button" onclick="playerUndo()">Undo (z)</div>
 		</div>
 	</body>

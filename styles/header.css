@@ -1,0 +1,22 @@
+#header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#header > div{
+    padding: 0px 25px 0px 25px;
+}
+
+#tutorial-button{
+    width: 75px;
+    height: 75px;
+    background-image: url(../assets/sprites/PMTOK_question_mark_indicator.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#tutorial-button:hover{
+    cursor: pointer;
+}
