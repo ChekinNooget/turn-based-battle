@@ -1,4 +1,10 @@
+@font-face {
+  font-family: SuperMarioScript;
+  src: url("/assets/fonts/SuperMarioScript2Demo-Regular.ttf");
+}
+
 body {
 	color: black;
     margin: 0px;
+    font-family: SuperMarioScript;
 }

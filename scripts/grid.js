@@ -3,29 +3,20 @@
 //sliding a column should affect the one mod6 ahead of it, but upside down
 //rotating a row just slides the row
 var tilesArray = [
-	[false, false, false, "A", false, false, false, false, false, false, false, false], //innermost ring
-	[false, false, false, "A", false, false, false, false, false, false, false, false],
-	[false, false, false, false, false, "A", false, false, false, false, false, false],
-	[false, false, false, false, false, false, "A", false, false, false, false, false], //outermost ring
+	["", "", "", "A", "", "", "", "", "", "", "", ""], //innermost ring
+	["", "", "", "A", "", "", "", "", "", "", "", ""],
+	["", "", "", "", "", "A", "", "", "", "", "", ""],
+	["", "", "", "", "", "", "A", "", "", "", "", ""], //outermost ring
 ];
 
 /* template all empty array
 var tilesArray = [
-	[false, false, false, false, false, false, false, false, false, false, false, false], //innermost ring
-	[false, false, false, false, false, false, false, false, false, false, false, false],
-	[false, false, false, false, false, false, false, false, false, false, false, false],
-	[false, false, false, false, false, false, false, false, false, false, false, false], //outermost ring
+	["", "", "", "", "", "", "", "", "", "", "", ""], //innermost ring
+	["", "", "", "", "", "", "", "", "", "", "", ""],
+	["", "", "", "", "", "", "", "", "", "", "", ""],
+	["", "", "", "", "", "", "", "", "", "", "", ""], //outermost ring
 ];
 */
-
-//replace all falses with empty strings. probably remove this at some point
-for (let i = 0; i < tilesArray.length; i++) {
-	for (let j = 0; j < tilesArray[i].length; j++) {
-		if (tilesArray[i][j] == false) {
-			tilesArray[i][j] = "";
-		}
-	}
-}
 
 //initialize timeout for future use
 var animationTimeout;
