@@ -1,6 +1,6 @@
 @font-face {
   font-family: SuperMarioScript;
-  src: url("/assets/fonts/SuperMarioScript2Demo-Regular.ttf");
+  src: url("../assets/fonts/SuperMarioScript2Demo-Regular.ttf");
 }
 
 body {
