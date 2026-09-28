@@ -36,13 +36,14 @@ document.body.addEventListener("keydown", (e) => {
 });
 
 function playerUndo() {
-    //undoes the past move by returning to the previous board state, then deleting the latest move.
+	//undoes the past move by returning to the previous board state, then deleting the latest move.
 	if (playerIsSelecting) {
 		if (previousMoves.length > 1) {
 			tilesArray = structuredClone(previousMoves[previousMoves.length - 2]);
 			previousMoves.pop();
 		}
-	} else { //unless the player is in the middle of a move, in which case, cancel the current move and don't delete
+	} else {
+		//unless the player is in the middle of a move, in which case, cancel the current move and don't delete
 		tilesArray = structuredClone(previousMoves[previousMoves.length - 1]);
 		playerIsSelecting = true;
 	}
@@ -56,10 +57,10 @@ function playerUndo() {
 
 //swap from rings to columns and vice versa
 function playerSwitchModes() {
-    //only swap modes if the player isn't currently changing a row or column
-    if (playerIsSelecting) {
-	    playerMode = !playerMode;
-    }
+	//only swap modes if the player isn't currently changing a row or column
+	if (playerIsSelecting) {
+		playerMode = !playerMode;
+	}
 
 	updateTargetedTilesCSS();
 
@@ -75,14 +76,14 @@ function playerConfirm() {
 		playerIsSelecting = true;
 		previousMoves.push(structuredClone(tilesArray));
 
-        var isSolved = checkIfSolved();
-        if (isSolved[0]) {
-            if (isSolved[1]) {
-                alert("solved perfectly! moves: " + (previousMoves.length - 1))
-            } else {
-                alert("solved with mismatched enemies!" + (previousMoves.length - 1))
-            }
-        }
+		var isSolved = checkIfSolved();
+		if (isSolved[0]) {
+			if (isSolved[1]) {
+				alert("solved perfectly! moves: " + (previousMoves.length - 1));
+			} else {
+				alert("solved with mismatched enemies!" + (previousMoves.length - 1));
+			}
+		}
 	}
 
 	updateTargetedTilesCSS();
@@ -116,7 +117,7 @@ function playerSwitchIndex(indexChange = 1, key = "ArrowLeft") {
 			}
 			//utter spaghetti. im sorry
 			//it's so that left inputs always shift the column left and so on
-            //trust the process frfr
+			//trust the process frfr
 			if (key == "ArrowUp" || key == "ArrowDown") {
 				if (9 <= playerSlidingIndex && playerSlidingIndex <= 11) {
 					direction = !direction;
@@ -141,16 +142,10 @@ function updateTargetedTilesCSS() {
 	var grid = document.getElementById("grid");
 	for (let i = 0; i < tilesArray.length; i++) {
 		for (let j = 0; j < tilesArray[i].length; j++) {
-			grid.children[i].children[j].style.backgroundColor = "black";
+			grid.children[i].children[j].classList.remove("selected-tile");
+			grid.children[i].children[j].classList.remove("confirming-tile");
 			//console.log(grid.children[i].children[j]);
 		}
-	}
-
-	var tileColor;
-	if (playerIsSelecting) {
-		tileColor = "red";
-	} else {
-		tileColor = "darkred";
 	}
 
 	if (playerMode) {
@@ -164,7 +159,11 @@ function updateTargetedTilesCSS() {
 	}
 
 	for (let i = 0; i < tileNodes.length; i++) {
-		tileNodes[i].style.backgroundColor = tileColor;
+		if (playerIsSelecting) {
+			tileNodes[i].classList.add("selected-tile");
+		} else {
+			tileNodes[i].classList.add("confirming-tile");
+		}
 	}
 }
 

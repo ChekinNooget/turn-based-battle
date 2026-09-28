@@ -1,17 +1,18 @@
-body {
-	color: white;
-}
-
 #grid {
+    pointer-events: none;
+    
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    height: 600px;
-    margin-top: 100px;
+
+    height: inherit;
+    width: 100%;
 }
 
 .tile {
+    pointer-events: none;
+
 	left: calc(50% - 25px);
 	top: calc(50% - 25px);
 	position: absolute;
@@ -23,12 +24,26 @@ body {
 	width: 50px;
 	height: 50px;
 	background-color: black;
+    color: white;
 	border-radius: 100%;
 
 	transition: 0.2s;
 }
 
-.fake-button{
-    background-color: grey;
-    width: 100px;
+.row {
+    pointer-events: none;
+
+	width: 50%;
+	aspect-ratio: 1 / 1;
+	background-color: transparent;
+	border-radius: 100%;
+	position: absolute;
+}
+
+.selected-tile{
+    background-color: red;
+}
+
+.confirming-tile{
+    background-color: darkred;
 }
