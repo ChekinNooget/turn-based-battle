@@ -47,6 +47,19 @@ function playerUndo() {
 		tilesArray = structuredClone(previousMoves[previousMoves.length - 1]);
 		playerIsSelecting = true;
 	}
+    
+
+    //TODO: player moves is updated here. tweak this eventually to move it somewhere else
+    var isSolved = checkIfSolved();
+    if (isSolved[0]) {
+        if (isSolved[1]) {
+            document.getElementById("move-count").textContent = "Solved! Move Count: " + (previousMoves.length - 1).toString();
+        } else {
+            document.getElementById("move-count").textContent = "Solved with mismatches! Move Count: " + (previousMoves.length - 1).toString();
+        }
+    } else {
+        document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
+    }
 
 	resetAnimation();
 	updateTargetedTilesCSS();
