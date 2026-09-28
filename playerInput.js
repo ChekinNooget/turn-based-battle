@@ -26,10 +26,10 @@ document.body.addEventListener("keydown", (e) => {
 	} else if (e.key == " ") {
 		playerConfirm();
 		e.preventDefault();
-	} else if (e.key == "x") {
+	} else if (e.key.toLowerCase() == "x") {
 		playerSwitchModes();
 		e.preventDefault();
-	} else if (e.key == "z") {
+	} else if (e.key.toLowerCase() == "z") {
 		playerUndo();
 		e.preventDefault();
 	}

@@ -36,8 +36,31 @@ var tilePaddingStart = 175;
 //ringIndex is which ring to target, and index is the tile of that ring.
 function getTransformCSS(ringIndex, index, transformOffset = 0) {
 	const effectiveIndex = (ringIndex + (index >= 6 ? 7 : 1) * shiftOffsets[index % 6]) % 8;
-	return `rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) 
-    translateY(${betweenTilesPadding * (effectiveIndex - transformOffset) + (effectiveIndex >= 4 ? -(tilePaddingStart * 4) : tilePaddingStart)}px) rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)`;
+	var tempTranslateY = ``;
+
+	if (effectiveIndex >= 4) {
+		//tile pushed from inside to other side
+		if (effectiveIndex == 7) {
+			tempTranslateY = `${-tilePaddingStart}`;
+		}
+		//tile pushed from outside to other side
+		else {
+			console.log(tilesArray[ringIndex][index]);
+			tempTranslateY = `${-betweenTilesPadding * (effectiveIndex + transformOffset - 1) - tilePaddingStart}`;
+		}
+	} else {
+		//every other tile (normal0)
+		tempTranslateY = `${betweenTilesPadding * (effectiveIndex - transformOffset) + tilePaddingStart}`;
+	}
+
+	return `
+        rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) 
+        translateY(${tempTranslateY}px)
+        rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)
+    `;
+
+    //original
+	//translateY(${betweenTilesPadding * (effectiveIndex - transformOffset) + (effectiveIndex >= 4 ? -(tilePaddingStart * 4) : tilePaddingStart)}px)
 }
 
 //get every row's tile back to its original rotation, and update the text correspondingly
@@ -158,25 +181,20 @@ function shiftColumn(columnIndex, direction = true) {
 	//animation below here
 	const board = document.getElementsByClassName("row");
 	for (let i = 0; i < board.length; i++) {
-		if (i != 3) {
-			//every other tile
-			board[i].children[columnIndex].style.transition = "0.2s";
-			board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
-			board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
-			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
-		} else {
-			//tile pushed towards center (treat as normal)
-			board[i].children[columnIndex].style.transition = "0.2s";
-			board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
+		board[i].children[columnIndex].style.transition = "0.2s";
+		board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
 
+		if (i == 3) {
 			//the outermost tile being pushed towards the edge
+			//put it one tile offset from the edge of the other side
 			board[i].children[(columnIndex + 6) % 12].style.transition = "0s";
 			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12, 1);
-			var columnHalfwayTimeout = setTimeout(function () {
-				board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
-				board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
-			}, 0); //idk why a 0 second timeout is needed but whatever
 		}
+
+		setTimeout(function () {
+			board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
+			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
+		}, 0);
 	}
 
 	clearTimeout(animationTimeout);
