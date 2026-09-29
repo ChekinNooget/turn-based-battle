@@ -337,7 +337,7 @@ function updateTileText() {
 		for (let j = 0; j < tilesArray[i].length; j++) {
 			if (tilesArray[i][j] != "") {
                 row.children[j].innerHTML = `<div>hi!</div>`
-                row.children[j].style.backgroundImage = `url(../assets/sprites/enemies/${tilesArray[i][j]}.png)`;
+                row.children[j].style.backgroundImage = `url(./assets/sprites/enemies/${tilesArray[i][j]}.png)`;
 			} else {
 				row.children[j].style.backgroundImage = "";
 			}
