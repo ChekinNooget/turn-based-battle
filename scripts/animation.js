@@ -1,12 +1,15 @@
 var mario = document.getElementById("mario-sprite");
 
 var startMarioIdle;
+var isMarioTryingToIdle = false;
 
 function setMarioThink() {
 	mario.style.animationName = "marioThink";
 	mario.style.animationDuration = "1s";
 	mario.style.animationIterationCount = "infinite";
 	mario.style.animationDirection = "alternate";
+    
+    isMarioTryingToIdle = false;
 
 	clearTimeout(startMarioIdle);
 }
@@ -17,8 +20,10 @@ function setMarioWin() {
 	mario.style.animationIterationCount = "1";
 	mario.style.animationDirection = "normal";
 
-	clearTimeout(startMarioIdle);
-	startMarioIdle = setTimeout(setMarioIdle, 2000);
+    if (!isMarioTryingToIdle) {
+        isMarioTryingToIdle = true;
+	    startMarioIdle = setTimeout(setMarioIdle, 2000);
+    }
 }
 
 function setMarioIdle() {
@@ -26,6 +31,8 @@ function setMarioIdle() {
 	mario.style.animationDuration = "1.5s";
 	mario.style.animationIterationCount = "infinite";
 	mario.style.animationDirection = "alternate";
+    
+    isMarioTryingToIdle = false;
 
 	clearTimeout(startMarioIdle);
 }
