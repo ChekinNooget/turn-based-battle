@@ -1,0 +1,78 @@
+#grid {
+	pointer-events: none;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+
+	height: inherit;
+	width: 100%;
+
+	z-index: 20;
+}
+
+#grid-background,
+#mario-sprite {
+	width: 100%;
+	height: 100%;
+
+	z-index: 10;
+
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+/*todo: make the background look nice!*/
+#grid-background {
+	background-color: var(--light-tile);
+
+	border-radius: 100%;
+}
+
+.tile {
+	pointer-events: auto;
+
+	left: calc(50% - 25px);
+	top: calc(50% - 25px);
+	position: absolute;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	width: 10%;
+	height: 10%;
+	max-width: 50px;
+	max-height: 50px;
+
+	background-color: black;
+	color: white;
+	border-radius: 100%;
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
+	transition: 0.2s;
+}
+
+.row {
+	pointer-events: none;
+
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	background-color: transparent;
+	border-radius: 100%;
+	position: absolute;
+}
+
+.selected-tile {
+	background-color: red;
+}
+
+.confirming-tile {
+	background-color: darkred;
+}

@@ -5,8 +5,11 @@
     justify-content: space-between;
 }
 
-#header > div{
-    padding: 0px 25px 0px 25px;
+#header > #header-left-side{
+    padding-left: 25px;
+}
+#header > #header-right-side{
+    padding-right: 5px;
 }
 
 #tutorial-button{

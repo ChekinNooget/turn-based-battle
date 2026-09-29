@@ -3,10 +3,10 @@
 //sliding a column should affect the one mod6 ahead of it, but upside down
 //rotating a row just slides the row
 var tilesArray = [
-	["", "", "", "A", "", "", "", "", "", "", "", ""], //innermost ring
-	["", "", "", "A", "", "", "", "", "", "", "", ""],
-	["", "", "", "", "", "A", "", "", "", "", "", ""],
-	["", "", "", "", "", "", "A", "", "", "", "", ""], //outermost ring
+	["", "", "", "shy_guy", "", "goomba", "", "", "", "", "", ""], //innermost ring
+	["", "", "", "shy_guy", "", "goomba", "", "", "", "", "", ""],
+	["", "", "", "", "", "shy_guy", "", "", "goomba", "", "", ""],
+	["", "", "", "", "", "", "shy_guy", "", "", "goomba", "", ""], //outermost ring
 ];
 
 /* template all empty array
@@ -35,7 +35,7 @@ function getTransformCSS(ringIndex, index, transformOffset = 0) {
 	if (effectiveIndex >= 4) {
 		//tile pushed from inside to other side
 		if (effectiveIndex == 7) {
-			tempTranslateY = `${-tilePaddingStart }`;
+			tempTranslateY = `${-tilePaddingStart}`;
 		}
 		//tile pushed from outside to other side
 		else {
@@ -52,17 +52,14 @@ function getTransformCSS(ringIndex, index, transformOffset = 0) {
         rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)
     `;
 
-    //original
+	//original
 	//translateY(${betweenTilesPadding * (effectiveIndex - transformOffset) + (effectiveIndex >= 4 ? -(tilePaddingStart * 4) : tilePaddingStart)}px)
 }
 
 //get every row's tile back to its original rotation, and update the text correspondingly
 function resetAnimation() {
 	updateTileText();
-    
-    //needs minor tweaking
-    betweenTilesPadding = Math.min(document.documentElement.clientWidth - 100, document.documentElement.clientHeight - 250)/10;
-    tilePaddingStart = Math.min(document.documentElement.clientWidth - 100, document.documentElement.clientHeight - 250)/5;
+	resizeGrid();
 
 	rotateOffsets = [7, 7, 7, 7];
 	shiftOffsets = [0, 0, 0, 0, 0, 0];
@@ -136,9 +133,9 @@ function getColumn(columnIndex, targetArray = tilesArray) {
 }
 
 function shiftColumn(columnIndex, direction = true) {
-    //todo: this is a temp solution to keep the shifting column animation from tweaking out when spammed
-    //fix soon probably please !!
-    resetAnimation();
+	//todo: this is a temp solution to keep the shifting column animation from tweaking out when spammed
+	//fix soon probably please !!
+	resetAnimation();
 
 	//change the array
 
@@ -192,7 +189,7 @@ function shiftColumn(columnIndex, direction = true) {
 			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12, 1);
 		}
 
-        //put everything in its proper spot
+		//put everything in its proper spot
 		setTimeout(function () {
 			board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
 			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
@@ -204,7 +201,6 @@ function shiftColumn(columnIndex, direction = true) {
 }
 
 //check if the board is solved
-//TODO: "" is the check for an empty tile. rework this maybe?
 //returns [bool:is solved?, bool:is solved with all matching enemies?]
 function checkIfSolved() {
 	var tempCheckedArray = tilesArray.slice();
@@ -336,15 +332,32 @@ function checkIfSolved() {
 
 //update every tile with its text
 function updateTileText() {
-	var grid = document.getElementById("grid");
 	for (let i = 0; i < tilesArray.length; i++) {
+		var row = document.getElementsByClassName("row")[i];
 		for (let j = 0; j < tilesArray[i].length; j++) {
-			grid.children[i].children[j].textContent = tilesArray[i][j];
+			if (tilesArray[i][j] != "") {
+                row.children[j].innerHTML = `<div>hi!</div>`
+                row.children[j].style.backgroundImage = `url(../assets/sprites/enemies/${tilesArray[i][j]}.png)`;
+			} else {
+				row.children[j].style.backgroundImage = "";
+			}
+			row.children[j].textContent = "";
 		}
 	}
+}
+
+function afterPuzzleSolved(matchingEnemies) {
+	if (matchingEnemies) {
+		document.getElementById("move-count").textContent = "Solved! Move Count: " + (previousMoves.length - 1).toString();
+	} else {
+		document.getElementById("move-count").textContent = "Solved with mismatches! Move Count: " + (previousMoves.length - 1).toString();
+	}
+
+	setMarioWin();
 }
 
 function setupStart() {
 	updateTileText();
 	resetAnimation();
+	setMarioThink();
 }

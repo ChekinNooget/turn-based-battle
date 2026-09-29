@@ -1,0 +1,58 @@
+@keyframes marioThink {
+	0% {
+		background-image: url(../assets/sprites/mario/think/mario_think_1.png);
+	}
+	50% {
+		background-image: url(../assets/sprites/mario/think/mario_think_2.png);
+	}
+}
+
+@keyframes marioWin {
+	0% {
+		background-image: url(../assets/sprites/mario/win/mario_adjust_hat_1.png);
+	}
+	20% {
+		background-image: url(../assets/sprites/mario/win/mario_adjust_hat_2.png);
+	}
+}
+
+@keyframes marioIdle {
+	0% {
+		background-image: url(../assets/sprites/mario/idle/mario_idle_1.png);
+	}
+	33% {
+		background-image: url(../assets/sprites/mario/idle/mario_idle_2.png);
+	}
+	66% {
+		background-image: url(../assets/sprites/mario/idle/mario_idle_3.png);
+	}
+}
+
+/*preload images so that the animation doesn't flash*/
+#mario-sprite::after {
+	position: absolute;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	z-index: -1;
+
+	content: url(../assets/sprites/mario/think/mario_think_1.png) url(../assets/sprites/mario/think/mario_think_2.png) url(../assets/sprites/mario/win/mario_adjust_hat_1.png) url(../assets/sprites/mario/win/mario_adjust_hat_2.png) url(../assets/sprites/mario/idle/mario_idle_1.png) url(../assets/sprites/mario/idle/mario_idle_2.png) url(../assets/sprites/mario/idle/mario_idle_3.png);
+}
+
+#mario-sprite {
+	width: 18%;
+	height: 18%;
+
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+
+	animation-duration: 0.5s;
+	animation-iteration-count: infinite;
+	animation-timing-function: steps(1, end);
+	animation-direction: alternate;
+
+	animation-name: marioThink;
+
+	transition: 0.5s;
+}

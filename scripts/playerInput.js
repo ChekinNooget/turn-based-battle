@@ -14,9 +14,17 @@ document.body.addEventListener("keydown", (e) => {
 	if (e.key == "ArrowLeft") {
 		playerSwitchIndex(-1, e.key);
 		e.preventDefault();
+
+		if (!playerIsSelecting) {
+			setMarioFacingLeft();
+		}
 	} else if (e.key == "ArrowRight") {
 		playerSwitchIndex(1, e.key);
 		e.preventDefault();
+
+		if (!playerIsSelecting) {
+			setMarioFacingRight();
+		}
 	} else if (e.key == "ArrowDown") {
 		playerSwitchIndex(-1, e.key);
 		e.preventDefault();
@@ -47,25 +55,19 @@ function playerUndo() {
 		tilesArray = structuredClone(previousMoves[previousMoves.length - 1]);
 		playerIsSelecting = true;
 	}
-    
 
-    //TODO: player moves is updated here. tweak this eventually to move it somewhere else
-    var isSolved = checkIfSolved();
-    if (isSolved[0]) {
-        if (isSolved[1]) {
-            document.getElementById("move-count").textContent = "Solved! Move Count: " + (previousMoves.length - 1).toString();
-        } else {
-            document.getElementById("move-count").textContent = "Solved with mismatches! Move Count: " + (previousMoves.length - 1).toString();
-        }
-    } else {
-        document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
-    }
+	//TODO: if solved is checked here. we probably want to do a different kind of check than if the player
+    //  just solved it, rather than undoing back to it.
+	var isSolved = checkIfSolved();
+	if (isSolved[0]) {
+		afterPuzzleSolved(isSolved[1]);
+	} else {
+		document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
+		setMarioThink();
+	}
 
 	resetAnimation();
 	updateTargetedTilesCSS();
-
-	document.getElementById("grid").focus();
-	document.activeElement = document.getElementById("grid");
 }
 
 //swap from rings to columns and vice versa
@@ -76,9 +78,6 @@ function playerSwitchModes() {
 	}
 
 	updateTargetedTilesCSS();
-
-	document.getElementById("grid").focus();
-	document.activeElement = document.getElementById("grid");
 }
 
 //on confirm, either choose a certain ring/column to start changing, or finish a move
@@ -89,23 +88,17 @@ function playerConfirm() {
 		playerIsSelecting = true;
 		previousMoves.push(structuredClone(tilesArray));
 
-        //TODO: player moves is updated here. tweak this eventually to move it somewhere else
+		//TODO: solve check is here. tweak this eventually to move it somewhere else
 		var isSolved = checkIfSolved();
 		if (isSolved[0]) {
-			if (isSolved[1]) {
-				document.getElementById("move-count").textContent = "Solved! Move Count: " + (previousMoves.length - 1).toString();
-			} else {
-				document.getElementById("move-count").textContent = "Solved with mismatches! Move Count: " + (previousMoves.length - 1).toString();
-			}
+			afterPuzzleSolved(isSolved[1]);
 		} else {
-	        document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
-        }
+			document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
+			setMarioThink();
+		}
 	}
 
 	updateTargetedTilesCSS();
-
-	document.getElementById("grid").focus();
-	document.activeElement = document.getElementById("grid");
 }
 
 //either switch which row/column to target, or shift the tiles.
@@ -148,37 +141,34 @@ function playerSwitchIndex(indexChange = 1, key = "ArrowLeft") {
 	}
 
 	updateTargetedTilesCSS();
-
-	document.getElementById("grid").focus();
-	document.activeElement = document.getElementById("grid");
 }
 
 //this changes the background colors of selected tiles
 function updateTargetedTilesCSS() {
-	var grid = document.getElementById("grid");
+	var grid = document.getElementsByClassName("row");
 	for (let i = 0; i < tilesArray.length; i++) {
 		for (let j = 0; j < tilesArray[i].length; j++) {
-			grid.children[i].children[j].classList.remove("selected-tile");
-			grid.children[i].children[j].classList.remove("confirming-tile");
+			grid[i].children[j].classList.remove("selected-tile");
+			grid[i].children[j].classList.remove("confirming-tile");
 			//console.log(grid.children[i].children[j]);
 		}
 	}
 
 	if (playerMode) {
-		var tileNodes = document.getElementsByClassName("row")[playerRotationIndex].children;
+		var targetNodes = grid[playerRotationIndex].children;
 	} else {
-		var tileNodes = [];
+		var targetNodes = [];
 		for (let i = 0; i < 4; i++) {
-			tileNodes.push(grid.children[i].children[playerSlidingIndex]);
-			tileNodes.push(grid.children[i].children[(playerSlidingIndex + 6) % 12]);
+			targetNodes.push(grid[i].children[playerSlidingIndex]);
+			targetNodes.push(grid[i].children[(playerSlidingIndex + 6) % 12]);
 		}
 	}
 
-	for (let i = 0; i < tileNodes.length; i++) {
+	for (let i = 0; i < targetNodes.length; i++) {
 		if (playerIsSelecting) {
-			tileNodes[i].classList.add("selected-tile");
+			targetNodes[i].classList.add("selected-tile");
 		} else {
-			tileNodes[i].classList.add("confirming-tile");
+			targetNodes[i].classList.add("confirming-tile");
 		}
 	}
 }
@@ -187,7 +177,7 @@ function updateTargetedTilesCSS() {
 function initializerPlayerInput() {
 	previousMoves.push(structuredClone(tilesArray));
 	updateTargetedTilesCSS();
-    document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
+	document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
 }
 
 initializerPlayerInput();

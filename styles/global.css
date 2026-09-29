@@ -1,37 +1,39 @@
 @font-face {
-  font-family: SuperMarioScript;
-  src: url("../assets/fonts/SuperMarioScript2Demo-Regular.ttf");
+	font-family: SuperMarioScript;
+	src: url("../assets/fonts/SuperMarioScript2Demo-Regular.ttf");
 }
 
 @font-face {
-  font-family: SuperMarioTitle;
-  src: url("../assets/fonts/SuperMario.ttf");
+	font-family: SuperMarioTitle;
+	src: url("../assets/fonts/SuperMario.ttf");
 }
 
-:root{
-    --yellow: #f5d541;
-    --bold-highlight: #020094;
+:root {
+	--yellow: #f5d541;
+	--bold-highlight: #020094;
+	--light-tile: #ada786;
+	--dark-tile: #8f8a6d;
 }
 
 body {
-    font-size: 1.2em;
-    font-family: SuperMarioScript;
+	font-size: 1.2em;
+	font-family: SuperMarioScript;
 	color: black;
-    margin: 0px;
+	margin: 0px;
 
-    overflow-x: hidden;
+	overflow-x: hidden;
 }
 
 h1 {
-    font-family: SuperMarioTitle;
-    font-size: 3em;
-    font-weight: normal;
+	font-family: SuperMarioTitle;
+	font-size: 3em;
+	font-weight: normal;
 
-    text-align: center;
+	text-align: center;
 
-    color: var(--yellow);
+	color: var(--yellow);
 }
 
-.bold{
-    color: var(--bold-highlight);
+.bold {
+	color: var(--bold-highlight);
 }
