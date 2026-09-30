@@ -1,4 +1,6 @@
 #main {
+    pointer-events: none;
+
     height: 85vh;
     margin-top: 10vh;
     margin-bottom: 5vh;

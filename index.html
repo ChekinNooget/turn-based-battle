@@ -15,7 +15,6 @@
 		<div id="header">
 			<div id="header-left-side">
 				<div>Cool Header</div>
-				<div id="move-count">999 sobad</div>
 			</div>
 			<div id="header-right-side">
 				<div id="tutorial-button" onclick="openOverlay('tutorial')"></div>
@@ -29,7 +28,7 @@
 					<p>The goal of each puzzle is to create lineups that sort the enemies into two kinds of groups: <span class="bold">squares, or lines</span>.</p>
 					<img src="assets/sprites/tutorial/temp square screenshot.png" />
 					<img src="assets/sprites/tutorial/temp line screenshot.png" />
-                    <p>Note: Enemies can't be a part of multiple groups at once.</p>
+					<p>Note: Enemies can't be a part of multiple groups at once.</p>
 					<p>Move enemies around by <span class="bold">rotating rings</span>, or by <span class="bold">sliding rows.</span></p>
 					<!--Note: in the code we called them "shifting columns," but apparently in-game it's called "sliding rows." Oops. We also called "rotating rings" "rotating rows" so hopefully that isn't confusing.-->
 					<p>Switch between moving rings or rows by pressing <span class="bold">X</span>. Once you've got a ring or row you'd like to change, press <span class="bold">Space</span> to select it. After that, use your <span class="bold">Arrow Keys</span> to move them around. Press <span class="bold">Space</span> again to confirm your move, and you're done! You can also press <span class="bold">Z</span> to undo.</p>
@@ -38,9 +37,13 @@
 			</div>
 			<button id="close-overlay-button" onclick="closeOverlay();">Close overlay</button>
 		</div>
+		<div id="moves-counter">
+			<div id="moves-counter-header">Ring Moves</div>
+			<div id="moves-counter-counter">x1</div>
+		</div>
 		<div id="main">
-            <div id="grid-background"></div>
-            <div id="mario-sprite" class="mario-sprite_think"></div>
+			<div id="grid-background"></div>
+			<div id="mario-sprite" class="mario-sprite_think"></div>
 			<div id="grid">
 				<div class="row">
 					<div class="tile">1</div>
@@ -110,7 +113,7 @@
 
 			<div class="fake-button" onclick="playerUndo()">Undo (z)</div>
 		</div>
-        <div class="preloaded-images"></div>
+		<div class="preloaded-images"></div>
 	</body>
 	<script type="text/javascript" src="scripts/grid.js"></script>
 	<script type="text/javascript" src="scripts/playerInput.js"></script>

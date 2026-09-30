@@ -52,7 +52,7 @@
 	max-width: 50px;
 	max-height: 50px;
 
-	background-color: black;
+	background-color: var(--dark-tile);
 	color: white;
 	border-radius: 100%;
 
@@ -70,9 +70,9 @@
 }
 
 .selected-tile {
-	background-color: red;
+	background-color: var(--selected-tile);
 }
 
 .confirming-tile {
-	background-color: darkred;
+	background-color: var(--confirming-tile);
 }

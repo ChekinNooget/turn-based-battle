@@ -57,12 +57,13 @@ function playerUndo() {
 	}
 
 	//TODO: if solved is checked here. we probably want to do a different kind of check than if the player
-    //  just solved it, rather than undoing back to it.
+	//  just solved it, rather than undoing back to it.
 	var isSolved = checkIfSolved();
 	if (isSolved[0]) {
 		afterPuzzleSolved(isSolved[1]);
 	} else {
-		document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
+		document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
+		document.getElementById("moves-counter-counter").className = "";
 		setMarioThink();
 	}
 
@@ -86,16 +87,20 @@ function playerConfirm() {
 		playerIsSelecting = false;
 	} else {
 		playerIsSelecting = true;
-		previousMoves.push(structuredClone(tilesArray));
+        //check if this move is the same as the previous move
+        if (structuredClone(tilesArray).join(" ") != previousMoves[previousMoves.length - 1].join(" ")) {
+            previousMoves.push(structuredClone(tilesArray));
 
-		//TODO: solve check is here. tweak this eventually to move it somewhere else
-		var isSolved = checkIfSolved();
-		if (isSolved[0]) {
-			afterPuzzleSolved(isSolved[1]);
-		} else {
-			document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
-			setMarioThink();
-		}
+            //TODO: solve check is here. tweak this eventually to move it somewhere else
+            var isSolved = checkIfSolved();
+            if (isSolved[0]) {
+                afterPuzzleSolved(isSolved[1]);
+            } else {
+                document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
+                document.getElementById("moves-counter-counter").className = "";
+                setMarioThink();
+            }
+        }
 	}
 
 	updateTargetedTilesCSS();
@@ -177,7 +182,7 @@ function updateTargetedTilesCSS() {
 function initializerPlayerInput() {
 	previousMoves.push(structuredClone(tilesArray));
 	updateTargetedTilesCSS();
-	document.getElementById("move-count").textContent = "Move Count: " + (previousMoves.length - 1).toString();
+	document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
 }
 
 initializerPlayerInput();

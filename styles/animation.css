@@ -66,7 +66,9 @@
 	}
 }
 
-.enemy-sprite-animate {
+.selected-tile > .enemy-sprite-animate {
+    height: 125%;
+    
 	animation-name: enemyRotate;
 	animation-iteration-count: infinite;
 	animation-duration: 2s;

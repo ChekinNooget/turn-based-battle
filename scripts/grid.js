@@ -304,7 +304,7 @@ function checkIfSolved() {
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][0]);
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][1]);
 
-    //TODO: there remains an edge case, where if the above edge case happens, the mismatched enemies check is wrong for the other squares from tempColumnsArray[0] to tempColumnsArray[tempBeginningEdgeCase].
+	//TODO: there remains an edge case, where if the above edge case happens, the mismatched enemies check is wrong for the other squares from tempColumnsArray[0] to tempColumnsArray[tempBeginningEdgeCase].
 
 	//check if all the tiles are filled
 	if (!tempCheckUniqueElements.includes("")) {
@@ -339,26 +339,25 @@ function updateTileText() {
 		for (let j = 0; j < tilesArray[i].length; j++) {
 			row.children[j].innerHTML = "";
 			if (tilesArray[i][j] != "") {
-                var enemySprite = document.createElement("img");
-                enemySprite.className = "enemy-sprite"
-                enemySprite.src = `./assets/sprites/enemies/${tilesArray[i][j]}.png`
-                //setInterval(function(){
-                    enemySprite.classList.add("enemy-sprite-animate")
-                //}, Math.random*1000)
-                //todo
-                row.children[j].appendChild(enemySprite)
-			} else {
-				//row.children[j].style.backgroundImage = "";
+				var enemySprite = document.createElement("img");
+				enemySprite.className = "enemy-sprite";
+				enemySprite.src = `./assets/sprites/enemies/${tilesArray[i][j]}.png`;
+				enemySprite.classList.add("enemy-sprite-animate");
+				row.children[j].appendChild(enemySprite);
 			}
 		}
 	}
 }
 
 function afterPuzzleSolved(matchingEnemies) {
+    var moveCounter = document.getElementById("moves-counter-counter")
+    
 	if (matchingEnemies) {
-		document.getElementById("move-count").textContent = "Solved! Move Count: " + (previousMoves.length - 1).toString();
+		moveCounter.textContent = "x" + (previousMoves.length - 1).toString();
+        moveCounter.className = "move-counter-full-solved"
 	} else {
-		document.getElementById("move-count").textContent = "Solved with mismatches! Move Count: " + (previousMoves.length - 1).toString();
+		moveCounter.textContent = "x" + (previousMoves.length - 1).toString();
+        moveCounter.className = "move-counter-half-solved"
 	}
 
 	setMarioWin();

@@ -9,10 +9,27 @@
 }
 
 :root {
-	--yellow: #f5d541;
+    /*text*/
+	--yellow: #e8bd51;
 	--bold-highlight: #020094;
-	--light-tile: #ada786;
+
+    --red-outline:#c13134;
+    --red-fill: #d77e78;
+
+    --yellow-outline: rgb(240, 240, 240);
+    --yellow-fill: #f3e040;
+
+    --green-outline: rgb(240, 240, 240);
+    --green-fill: #89d858;
+
+    --dark-gray: #484848;
+
+
+    /*grid*/
+	--light-tile: #bebaa1;
 	--dark-tile: #8f8a6d;
+    --selected-tile: cyan;
+    --confirming-tile: darkcyan;
 }
 
 body {
