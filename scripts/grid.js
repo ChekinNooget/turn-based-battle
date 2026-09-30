@@ -29,6 +29,7 @@ var tilePaddingStart = 175;
 //the css that is applied to the tiles in order to get them in a ring
 //ringIndex is which ring to target, and index is the tile of that ring.
 function getTransformCSS(ringIndex, index, transformOffset = 0) {
+    //scan the more i analyze this singlular line the more cursed it gets :broken_heart:
 	const effectiveIndex = (ringIndex + (index >= 6 ? 7 : 1) * shiftOffsets[index % 6]) % 8;
 	var tempTranslateY = ``;
 
@@ -49,7 +50,7 @@ function getTransformCSS(ringIndex, index, transformOffset = 0) {
 	return `
         rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12 + 15}deg) 
         translateY(${tempTranslateY}px)
-        rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12 + 15}deg)
+        rotateZ(${-(((rotateOffsets[ringIndex] + index) * 360) / 12 + 15)}deg)
     `;
 
 	//original
@@ -87,6 +88,7 @@ function rotateRing(ringIndex, direction = true) {
 	} else {
 		rotateOffsets[ringIndex]--;
 	}
+    console.log(rotateOffsets)
 
 	var newTempRing = tilesArray[ringIndex].slice();
 
@@ -120,7 +122,7 @@ function rotateRing(ringIndex, direction = true) {
 	//set this to whatever the transition time is
 	//clear timeout in case you're spamming the button
 	clearTimeout(animationTimeout);
-	animationTimeout = setTimeout(resetAnimation, 200);
+	animationTimeout = setTimeout(resetAnimation, 20000);
 }
 
 //returns the column, in order of [innermost ring, awef, awef, outermost ring]
