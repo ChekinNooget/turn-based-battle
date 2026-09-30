@@ -87,20 +87,20 @@ function playerConfirm() {
 		playerIsSelecting = false;
 	} else {
 		playerIsSelecting = true;
-        //check if this move is the same as the previous move
-        if (structuredClone(tilesArray).join(" ") != previousMoves[previousMoves.length - 1].join(" ")) {
-            previousMoves.push(structuredClone(tilesArray));
+		//check if this move is the same as the previous move
+		if (structuredClone(tilesArray).join(" ") != previousMoves[previousMoves.length - 1].join(" ")) {
+			previousMoves.push(structuredClone(tilesArray));
 
-            //TODO: solve check is here. tweak this eventually to move it somewhere else
-            var isSolved = checkIfSolved();
-            if (isSolved[0]) {
-                afterPuzzleSolved(isSolved[1]);
-            } else {
-                document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
-                document.getElementById("moves-counter-counter").className = "";
-                setMarioThink();
-            }
-        }
+			//TODO: solve check is here. tweak this eventually to move it somewhere else
+			var isSolved = checkIfSolved();
+			if (isSolved[0]) {
+				afterPuzzleSolved(isSolved[1]);
+			} else {
+				document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
+				document.getElementById("moves-counter-counter").className = "";
+				setMarioThink();
+			}
+		}
 	}
 
 	updateTargetedTilesCSS();
@@ -132,12 +132,18 @@ function playerSwitchIndex(indexChange = 1, key = "ArrowLeft") {
 			//utter spaghetti. im sorry
 			//it's so that left inputs always shift the column left and so on
 			//trust the process frfr
+			console.log(playerSlidingIndex);
 			if (key == "ArrowUp" || key == "ArrowDown") {
-				if (9 <= playerSlidingIndex && playerSlidingIndex <= 11) {
+				if (8 <= playerSlidingIndex && playerSlidingIndex <= 11) {
 					direction = !direction;
 				}
 
-				if (3 <= playerSlidingIndex && playerSlidingIndex <= 5) {
+				if (2 <= playerSlidingIndex && playerSlidingIndex <= 5) {
+					direction = !direction;
+				}
+			}
+			if (key == "ArrowRight" || key == "ArrowLeft") {
+				if (playerSlidingIndex == 5 || playerSlidingIndex == 11) {
 					direction = !direction;
 				}
 			}

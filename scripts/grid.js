@@ -47,9 +47,9 @@ function getTransformCSS(ringIndex, index, transformOffset = 0) {
 	}
 
 	return `
-        rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12}deg) 
+        rotateZ(${((rotateOffsets[ringIndex] + index) * 360) / 12 + 15}deg) 
         translateY(${tempTranslateY}px)
-        rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12}deg)
+        rotateZ(-${((rotateOffsets[ringIndex] + index) * 360) / 12 + 15}deg)
     `;
 
 	//original
