@@ -32,6 +32,10 @@
 	border-radius: 100%;
 }
 
+.enemy-sprite{
+    height: 120%;
+}
+
 .tile {
 	pointer-events: auto;
 
@@ -51,10 +55,6 @@
 	background-color: black;
 	color: white;
 	border-radius: 100%;
-
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 
 	transition: 0.2s;
 }

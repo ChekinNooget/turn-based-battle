@@ -304,6 +304,8 @@ function checkIfSolved() {
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][0]);
 	tempCheckUniqueElements.push(tempColumnsArray[tempColumnsArray.length - 1][1]);
 
+    //TODO: there remains an edge case, where if the above edge case happens, the mismatched enemies check is wrong for the other squares from tempColumnsArray[0] to tempColumnsArray[tempBeginningEdgeCase].
+
 	//check if all the tiles are filled
 	if (!tempCheckUniqueElements.includes("")) {
 		//again, if the tiles aren't equal, the enemies are mismatched
@@ -335,13 +337,19 @@ function updateTileText() {
 	for (let i = 0; i < tilesArray.length; i++) {
 		var row = document.getElementsByClassName("row")[i];
 		for (let j = 0; j < tilesArray[i].length; j++) {
+			row.children[j].innerHTML = "";
 			if (tilesArray[i][j] != "") {
-                row.children[j].innerHTML = `<div>hi!</div>`
-                row.children[j].style.backgroundImage = `url(./assets/sprites/enemies/${tilesArray[i][j]}.png)`;
+                var enemySprite = document.createElement("img");
+                enemySprite.className = "enemy-sprite"
+                enemySprite.src = `./assets/sprites/enemies/${tilesArray[i][j]}.png`
+                //setInterval(function(){
+                    enemySprite.classList.add("enemy-sprite-animate")
+                //}, Math.random*1000)
+                //todo
+                row.children[j].appendChild(enemySprite)
 			} else {
-				row.children[j].style.backgroundImage = "";
+				//row.children[j].style.backgroundImage = "";
 			}
-			row.children[j].textContent = "";
 		}
 	}
 }

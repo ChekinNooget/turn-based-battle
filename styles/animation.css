@@ -29,14 +29,14 @@
 }
 
 /*preload images so that the animation doesn't flash*/
-#mario-sprite::after {
+.preloaded-images {
 	position: absolute;
-	width: 0;
-	height: 0;
+	width: 1px;
+	height: 1px;
 	overflow: hidden;
 	z-index: -1;
 
-	content: url(../assets/sprites/mario/think/mario_think_1.png) url(../assets/sprites/mario/think/mario_think_2.png) url(../assets/sprites/mario/win/mario_adjust_hat_1.png) url(../assets/sprites/mario/win/mario_adjust_hat_2.png) url(../assets/sprites/mario/idle/mario_idle_1.png) url(../assets/sprites/mario/idle/mario_idle_2.png) url(../assets/sprites/mario/idle/mario_idle_3.png);
+	background-image: url(../assets/sprites/mario/think/mario_think_1.png), url(../assets/sprites/mario/think/mario_think_2.png), url(../assets/sprites/mario/win/mario_adjust_hat_1.png), url(../assets/sprites/mario/win/mario_adjust_hat_2.png), url(../assets/sprites/mario/idle/mario_idle_1.png), url(../assets/sprites/mario/idle/mario_idle_2.png), url(../assets/sprites/mario/idle/mario_idle_3.png);
 }
 
 #mario-sprite {
@@ -55,4 +55,20 @@
 	animation-name: marioThink;
 
 	transition: 0.5s;
+}
+
+@keyframes enemyRotate {
+	0% {
+		transform: rotate(3deg);
+	}
+	50% {
+		transform: rotate(-3deg);
+	}
+}
+
+.enemy-sprite-animate {
+	animation-name: enemyRotate;
+	animation-iteration-count: infinite;
+	animation-duration: 2s;
+	animation-timing-function: step-end;
 }
