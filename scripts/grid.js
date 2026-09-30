@@ -133,8 +133,6 @@ function getColumn(columnIndex, targetArray = tilesArray) {
 }
 
 function shiftColumn(columnIndex, direction = true) {
-	//todo: this is a temp solution to keep the shifting column animation from tweaking out when spammed
-	//fix soon probably please !!
 	resetAnimation();
 
 	//change the array
@@ -176,25 +174,32 @@ function shiftColumn(columnIndex, direction = true) {
 		tilesArray[i][(columnIndex + 6) % 12] = newTempColumn2[i];
 	}
 
-	//animation below here
-	const board = document.getElementsByClassName("row");
-	for (let i = 0; i < board.length; i++) {
-		board[i].children[columnIndex].style.transition = "0.2s";
-		board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
+	//i have no idea why, but making a setTimeout here fixes the weird animation bug ¯\_ (c:)_/¯
+	//probably not the best solution buttttttttttttttttttt it works
+	setTimeout(() => {
+		//animation below here
+		const board = document.getElementsByClassName("row");
+		for (let i = 0; i < board.length; i++) {
+			board[i].children[columnIndex].style.transition = "0.2s";
+			board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
 
-		if (i == 3) {
-			//the outermost tile being pushed towards the edge
-			//put it one tile offset from the edge of the other side
-			board[i].children[(columnIndex + 6) % 12].style.transition = "0s";
-			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12, 1);
+			if (i == 3) {
+				//the outermost tile being pushed towards the edge
+				//put it one tile offset from the edge of the other side
+				board[i].children[(columnIndex + 6) % 12].style.transition = "0s";
+				board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12, 1);
+			}
+
+			//put everything in its proper spot
+			setTimeout(function () {
+				board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
+				board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
+			}, 0);
 		}
-
-		//put everything in its proper spot
-		setTimeout(function () {
-			board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
-			board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
-		}, 0);
-	}
+	}, 25); //maybe need to fine tune this number a bit? how it seems to work is that if you input fast than this time,
+    //then it teleports instead of moving, but the animation's initial delay is also this same amount
+    //so it's a balancing act
+    //you know what i don't really care it's fine as it is :cate:
 
 	clearTimeout(animationTimeout);
 	animationTimeout = setTimeout(resetAnimation, 200);
@@ -350,14 +355,14 @@ function updateTileText() {
 }
 
 function afterPuzzleSolved(matchingEnemies) {
-    var moveCounter = document.getElementById("moves-counter-counter")
-    
+	var moveCounter = document.getElementById("moves-counter-counter");
+
 	if (matchingEnemies) {
 		moveCounter.textContent = "x" + (previousMoves.length - 1).toString();
-        moveCounter.className = "move-counter-full-solved"
+		moveCounter.className = "move-counter-full-solved";
 	} else {
 		moveCounter.textContent = "x" + (previousMoves.length - 1).toString();
-        moveCounter.className = "move-counter-half-solved"
+		moveCounter.className = "move-counter-half-solved";
 	}
 
 	setMarioWin();

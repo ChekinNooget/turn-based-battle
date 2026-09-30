@@ -132,7 +132,7 @@ function playerSwitchIndex(indexChange = 1, key = "ArrowLeft") {
 			//utter spaghetti. im sorry
 			//it's so that left inputs always shift the column left and so on
 			//trust the process frfr
-			console.log(playerSlidingIndex);
+            
 			if (key == "ArrowUp" || key == "ArrowDown") {
 				if (8 <= playerSlidingIndex && playerSlidingIndex <= 11) {
 					direction = !direction;
