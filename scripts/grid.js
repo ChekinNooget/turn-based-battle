@@ -88,7 +88,6 @@ function rotateRing(ringIndex, direction = true) {
 	} else {
 		rotateOffsets[ringIndex]--;
 	}
-    console.log(rotateOffsets)
 
 	var newTempRing = tilesArray[ringIndex].slice();
 
@@ -122,7 +121,7 @@ function rotateRing(ringIndex, direction = true) {
 	//set this to whatever the transition time is
 	//clear timeout in case you're spamming the button
 	clearTimeout(animationTimeout);
-	animationTimeout = setTimeout(resetAnimation, 20000);
+	animationTimeout = setTimeout(resetAnimation, 200);
 }
 
 //returns the column, in order of [innermost ring, awef, awef, outermost ring]
