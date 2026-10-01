@@ -15,6 +15,10 @@
 		<div id="header">
 			<div id="header-left-side">
 				<div>Cool Header</div>
+                <!--placeholder inputs, probably move these to a "random level" overlay panel sometime-->
+                <button onclick="awef = generateRandomGrid(generateRandomString(10), document.getElementById('enemy-groups').value, document.getElementById('enemy-shuffle').value)">Random Level</button>
+                <input id="enemy-groups" type="number" min="1" max="6" placeholder="number of enemy groups" value="3">
+                <input id="enemy-shuffle" type="number" min="1" max="10" placeholder="move shuffle amount" value="3">
 			</div>
 			<div id="header-right-side">
 				<div id="share-button" class="header-right-button" onclick="openOverlay('share')"></div>
@@ -128,4 +132,5 @@
 	<script type="text/javascript" src="scripts/layout.js"></script>
 	<script type="text/javascript" src="scripts/animation.js"></script>
 	<script type="text/javascript" src="scripts/data.js"></script>
+	<script type="text/javascript" src="scripts/random.js"></script>
 </html>

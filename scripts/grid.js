@@ -20,6 +20,7 @@ var tilesArray = [
 
 //initialize timeout for future use
 var animationTimeout;
+var columnShiftTimeout;
 
 //the amount of pixels in between each row
 var betweenTilesPadding = 75;
@@ -29,7 +30,7 @@ var tilePaddingStart = 175;
 //the css that is applied to the tiles in order to get them in a ring
 //ringIndex is which ring to target, and index is the tile of that ring.
 function getTransformCSS(ringIndex, index, transformOffset = 0) {
-    //scan the more i analyze this singlular line the more cursed it gets :broken_heart:
+	//scan the more i analyze this singlular line the more cursed it gets :broken_heart:
 	const effectiveIndex = (ringIndex + (index >= 6 ? 7 : 1) * shiftOffsets[index % 6]) % 8;
 	var tempTranslateY = ``;
 
@@ -79,7 +80,7 @@ function resetAnimation() {
 var rotateOffsets = [7, 7, 7, 7],
 	shiftOffsets = [0, 0, 0, 0, 0, 0];
 
-function rotateRing(ringIndex, direction = true) {
+function rotateRing(ringIndex, direction = true, doAnimation = true, targetArray = tilesArray) {
 	//change the array
 
 	//change which direction to spin the ring based on the direction that was inputted
@@ -89,39 +90,44 @@ function rotateRing(ringIndex, direction = true) {
 		rotateOffsets[ringIndex]--;
 	}
 
-	var newTempRing = tilesArray[ringIndex].slice();
+	var newTempRing = targetArray[ringIndex].slice();
 
 	//whichever way it is, shift all of the elements in that array over by one.
 	if (direction) {
-		for (let i = 0; i < tilesArray[ringIndex].length; i++) {
+		for (let i = 0; i < targetArray[ringIndex].length; i++) {
 			if (i == 0) {
-				newTempRing[i] = tilesArray[ringIndex][tilesArray[ringIndex].length - 1];
+				newTempRing[i] = targetArray[ringIndex][targetArray[ringIndex].length - 1];
 			} else {
-				newTempRing[i] = tilesArray[ringIndex][i - 1];
+				newTempRing[i] = targetArray[ringIndex][i - 1];
 			}
 		}
 	} else {
-		for (let i = 0; i < tilesArray[ringIndex].length; i++) {
-			if (i == tilesArray[ringIndex].length - 1) {
-				newTempRing[i] = tilesArray[ringIndex][0];
+		for (let i = 0; i < targetArray[ringIndex].length; i++) {
+			if (i == targetArray[ringIndex].length - 1) {
+				newTempRing[i] = targetArray[ringIndex][0];
 			} else {
-				newTempRing[i] = tilesArray[ringIndex][i + 1];
+				newTempRing[i] = targetArray[ringIndex][i + 1];
 			}
 		}
 	}
-	tilesArray[ringIndex] = newTempRing;
+	targetArray[ringIndex] = newTempRing;
 
-	//visual stuff
-	var tileNodes = document.getElementsByClassName("row")[ringIndex].children;
-	for (let i = 0; i < tileNodes.length; i++) {
-		tileNodes[i].style.transition = "0.2s";
-		tileNodes[i].style.transform = getTransformCSS(ringIndex, i);
+	if (doAnimation) {
+		//visual stuff
+		var tileNodes = document.getElementsByClassName("row")[ringIndex].children;
+		for (let i = 0; i < tileNodes.length; i++) {
+            //idk why but there's a rotation bug that gets fixed (supposedly) if it's changed to 0.19 from 0.2
+			tileNodes[i].style.transition = ".19s";
+			tileNodes[i].style.transform = getTransformCSS(ringIndex, i);
+		}
+
+		//set this to whatever the transition time is
+		//clear timeout in case you're spamming the button
+		clearTimeout(animationTimeout);
+		animationTimeout = setTimeout(resetAnimation, 200);
 	}
 
-	//set this to whatever the transition time is
-	//clear timeout in case you're spamming the button
-	clearTimeout(animationTimeout);
-	animationTimeout = setTimeout(resetAnimation, 200);
+	return targetArray;
 }
 
 //returns the column, in order of [innermost ring, awef, awef, outermost ring]
@@ -133,8 +139,10 @@ function getColumn(columnIndex, targetArray = tilesArray) {
 	return newColumn;
 }
 
-function shiftColumn(columnIndex, direction = true) {
-	resetAnimation();
+function shiftColumn(columnIndex, direction = true, doAnimation = true, targetArray = tilesArray) {
+	if (doAnimation) {
+		resetAnimation();
+	}
 
 	//change the array
 
@@ -143,8 +151,8 @@ function shiftColumn(columnIndex, direction = true) {
 	}
 	shiftOffsets[columnIndex % 6] += columnIndex >= 6 ? 1 : 7;
 
-	var newTempColumn1 = getColumn(columnIndex); //column pushed towards center
-	var newTempColumn2 = getColumn((columnIndex + 6) % 12); // column pushed towards edge
+	var newTempColumn1 = getColumn(columnIndex, targetArray); //column pushed towards center
+	var newTempColumn2 = getColumn((columnIndex + 6) % 12, targetArray); // column pushed towards edge
 
 	var pushedTile1 = newTempColumn1.slice()[0];
 	var pushedTile2 = newTempColumn2.slice()[3];
@@ -169,41 +177,46 @@ function shiftColumn(columnIndex, direction = true) {
 
 	//replace the original array with the columns
 	for (let i = 0; i < 4; i++) {
-		tilesArray[i][columnIndex] = newTempColumn1[i];
+		targetArray[i][columnIndex] = newTempColumn1[i];
 	}
 	for (let i = 0; i < 4; i++) {
-		tilesArray[i][(columnIndex + 6) % 12] = newTempColumn2[i];
+		targetArray[i][(columnIndex + 6) % 12] = newTempColumn2[i];
 	}
 
-	//i have no idea why, but making a setTimeout here fixes the weird animation bug ¯\_ (c:)_/¯
-	//probably not the best solution buttttttttttttttttttt it works
-	setTimeout(() => {
-		//animation below here
-		const board = document.getElementsByClassName("row");
-		for (let i = 0; i < board.length; i++) {
-			board[i].children[columnIndex].style.transition = "0.2s";
-			board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
+	if (doAnimation) {
+		//i have no idea why, but making a setTimeout here fixes the weird animation bug ¯\_ (c:)_/¯
+		//probably not the best solution buttttttttttttttttttt it works
+		columnShiftTimeout = setTimeout(() => {
+			//animation below here
+			const board = document.getElementsByClassName("row");
+			for (let i = 0; i < board.length; i++) {
+				board[i].children[columnIndex].style.transition = "0.2s";
+				board[i].children[columnIndex].style.transform = getTransformCSS(i, columnIndex);
 
-			if (i == 3) {
-				//the outermost tile being pushed towards the edge
-				//put it one tile offset from the edge of the other side
-				board[i].children[(columnIndex + 6) % 12].style.transition = "0s";
-				board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12, 1);
+				if (i == 3) {
+					//the outermost tile being pushed towards the edge
+					//put it one tile offset from the edge of the other side
+					board[i].children[(columnIndex + 6) % 12].style.transition = "0s";
+					board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12, 1);
+				}
+
+				//put everything in its proper spot
+				//idk why this needs a set timeout either
+				setTimeout(function () {
+					board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
+					board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
+				}, 1);
 			}
+		}, 25); //maybe need to fine tune this number a bit? how it seems to work is that if you input fast than this time,
+		//then it teleports instead of moving, but the animation's initial delay is also this same amount
+		//so it's a balancing act
+		//you know what i don't really care it's fine as it is :cate:
 
-			//put everything in its proper spot
-			setTimeout(function () {
-				board[i].children[(columnIndex + 6) % 12].style.transition = "0.2s";
-				board[i].children[(columnIndex + 6) % 12].style.transform = getTransformCSS(i, (columnIndex + 6) % 12);
-			}, 0);
-		}
-	}, 25); //maybe need to fine tune this number a bit? how it seems to work is that if you input fast than this time,
-    //then it teleports instead of moving, but the animation's initial delay is also this same amount
-    //so it's a balancing act
-    //you know what i don't really care it's fine as it is :cate:
+		clearTimeout(animationTimeout);
+		animationTimeout = setTimeout(resetAnimation, 200);
+	}
 
-	clearTimeout(animationTimeout);
-	animationTimeout = setTimeout(resetAnimation, 200);
+	return targetArray;
 }
 
 //check if the board is solved
