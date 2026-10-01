@@ -1,7 +1,6 @@
 window.addEventListener(
 	"resize",
 	function (event) {
-		console.log("on resize");
 		resetAnimation();
         resizeGrid()
 	},
@@ -19,8 +18,6 @@ function resizeGrid(){
 
     gridBackground.style.width = `${gridDiameter}px`
     gridBackground.style.height = `${gridDiameter}px`
-
-    
 }
 
 function closeOverlay() {

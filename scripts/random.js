@@ -1,3 +1,5 @@
+/*this file is just for storing all our random generation functions.*/
+
 //https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript
 //https://stackoverflow.com/a/47593316
 
