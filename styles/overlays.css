@@ -34,6 +34,21 @@
 	z-index: 200;
 
 	display: none;
+
+	transition: 0.5s;
+}
+
+#close-overlay-button {
+	position: absolute;
+	top: -15px;
+	right: 0;
+	margin: 20px;
+	border: none;
+	background-color: transparent;
+	font-family: SuperMarioTitle;
+	font-size: 3em;
+    cursor: pointer;
+    
 }
 
 #moves-counter {
@@ -44,15 +59,15 @@
 	width: 250px;
 	height: 100px;
 
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
 	font-family: SuperMarioTitle;
 	font-size: 2em;
-    justify-content: space-evenly;
+	justify-content: space-evenly;
 
 	text-align: center;
-    line-height: 50%;
+	line-height: 50%;
 
 	background: lightgray;
 	border: none solid 0px;
@@ -66,13 +81,13 @@
 }
 
 #moves-counter > #moves-counter-counter {
-    font-size: 1.5em;
-    
+	font-size: 1.5em;
+
 	color: var(--red-outline);
 	-webkit-text-fill-color: var(--red-fill);
 	-webkit-text-stroke: 3px;
 
-    text-shadow: 0px 0px 4px black;
+	text-shadow: 0px 0px 4px black;
 }
 
 #moves-counter > .move-counter-half-solved {
@@ -82,4 +97,10 @@
 #moves-counter > .move-counter-full-solved {
 	color: var(--green-outline) !important;
 	-webkit-text-fill-color: var(--green-fill) !important;
+}
+
+#share-overlay > p {
+	text-align: center;
+	font-size: 2em;
+	line-height: 50%;
 }

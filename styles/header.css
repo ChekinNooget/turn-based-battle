@@ -1,25 +1,35 @@
 #header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
 }
 
-#header > #header-left-side{
-    padding-left: 25px;
+#header > #header-left-side {
+	padding-left: 25px;
 }
-#header > #header-right-side{
-    padding-right: 5px;
+#header > #header-right-side {
+	padding-right: 5px;
+
+	display: flex;
+	flex-direction: row;
 }
 
-#tutorial-button{
-    width: 75px;
-    height: 75px;
-    background-image: url(../assets/sprites/ui/PMTOK_question_mark_indicator.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-}
+.header-right-button {
+	width: 75px;
+	height: 75px;
+    
+	background-size: contain;
+	background-repeat: no-repeat;
 
-#tutorial-button:hover{
-    cursor: pointer;
+    padding-left: 10px;
+}
+.header-right-button:hover {
+	cursor: pointer;
+}
+#tutorial-button {
+	background-image: url(../assets/sprites/ui/PMTOK_question_mark_indicator.png);
+}
+#share-button {
+	background-image: url(../assets/sprites/ui/PMTOK_fax_machine_render.png);
 }

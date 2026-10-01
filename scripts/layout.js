@@ -26,12 +26,14 @@ function resizeGrid(){
 function closeOverlay() {
 	var overlayDiv = document.getElementById("overlay");
 	overlayDiv.style.display = "none";
+	//overlayDiv.style.opacity = "0"; //try to get the fade in animation working somehow...
 	document.getElementById("dark-background").style.display = "none";
 }
 
 function openOverlay(layout) {
 	var overlayDiv = document.getElementById("overlay");
 	overlayDiv.style.display = "block";
+	//overlayDiv.style.opacity = "1";
 	document.getElementById("dark-background").style.display = "block";
 
 	var allOverlaysDiv = document.getElementById("all-overlays");
@@ -39,7 +41,10 @@ function openOverlay(layout) {
 		allOverlaysDiv.children[i].style.display = "none";
 	}
 
+    
 	if (layout == "tutorial") {
-		allOverlaysDiv.children[0].style.display = "block";
-	}
+		document.getElementById("tutorial-overlay").style.display = "block";
+	} else if (layout == "share"){
+		document.getElementById("share-overlay").style.display = "block";
+    }
 }

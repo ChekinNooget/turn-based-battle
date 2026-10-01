@@ -354,23 +354,3 @@ function updateTileText() {
 		}
 	}
 }
-
-function afterPuzzleSolved(matchingEnemies) {
-	var moveCounter = document.getElementById("moves-counter-counter");
-
-	if (matchingEnemies) {
-		moveCounter.textContent = "x" + (previousMoves.length - 1).toString();
-		moveCounter.className = "move-counter-full-solved";
-	} else {
-		moveCounter.textContent = "x" + (previousMoves.length - 1).toString();
-		moveCounter.className = "move-counter-half-solved";
-	}
-
-	setMarioWin();
-}
-
-function setupStart() {
-	updateTileText();
-	resetAnimation();
-	setMarioThink();
-}

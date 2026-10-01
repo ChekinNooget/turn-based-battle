@@ -17,13 +17,14 @@
 				<div>Cool Header</div>
 			</div>
 			<div id="header-right-side">
-				<div id="tutorial-button" onclick="openOverlay('tutorial')"></div>
+				<div id="share-button" class="header-right-button" onclick="openOverlay('share')"></div>
+				<div id="tutorial-button" class="header-right-button" onclick="openOverlay('tutorial')"></div>
 			</div>
 		</div>
 		<div id="dark-background" onclick="closeOverlay()"></div>
 		<div id="overlay">
 			<div id="all-overlays">
-				<div class="tutorial-overlay">
+				<div id="tutorial-overlay">
 					<h1>Line them up!</h1>
 					<p>The goal of each puzzle is to create lineups that sort the enemies into two kinds of groups: <span class="bold">squares, or lines</span>.</p>
 					<img src="assets/sprites/tutorial/temp square screenshot.png" />
@@ -34,8 +35,15 @@
 					<p>Switch between moving rings or rows by pressing <span class="bold">X</span>. Once you've got a ring or row you'd like to change, press <span class="bold">Space</span> to select it. After that, use your <span class="bold">Arrow Keys</span> to move them around. Press <span class="bold">Space</span> again to confirm your move, and you're done! You can also press <span class="bold">Z</span> to undo.</p>
 					<p>Try to sort all of the enemies in as few moves as possible!</p>
 				</div>
+				<div id="share-overlay">
+					<h1>Share your score</h1>
+                    <p id="share-moves">Moves taken: XX</p>
+                    <p id="share-solved">Unsolved/Enemies matched/Enemies unmatched</p>
+                    <p id="share-time">Time: XX:XX</p>
+                    <button onclick="copyShareToClipboard()">Copy to Clipboard</button>
+                </div>
 			</div>
-			<button id="close-overlay-button" onclick="closeOverlay();">Close overlay</button>
+			<button id="close-overlay-button" onclick="closeOverlay();">X</button>
 		</div>
 		<div id="moves-counter">
 			<div id="moves-counter-header">Ring Moves</div>
@@ -119,4 +127,5 @@
 	<script type="text/javascript" src="scripts/playerInput.js"></script>
 	<script type="text/javascript" src="scripts/layout.js"></script>
 	<script type="text/javascript" src="scripts/animation.js"></script>
+	<script type="text/javascript" src="scripts/data.js"></script>
 </html>

@@ -94,7 +94,7 @@ function playerConfirm() {
 			//TODO: solve check is here. tweak this eventually to move it somewhere else
 			var isSolved = checkIfSolved();
 			if (isSolved[0]) {
-				afterPuzzleSolved(isSolved[1]);
+				afterPuzzleSolved(isSolved[1], true, true);
 			} else {
 				document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
 				document.getElementById("moves-counter-counter").className = "";
