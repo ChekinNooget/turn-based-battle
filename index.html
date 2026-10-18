@@ -14,15 +14,18 @@
 	<body onload="setupStart()">
 		<div id="header">
 			<div id="header-left-side">
-				<div>Cool Header</div>
-                <!--placeholder inputs, probably move these to a "random level" overlay panel sometime-->
-                <button onclick="awef = generateRandomGrid(generateRandomString(10), document.getElementById('enemy-groups').value, document.getElementById('enemy-shuffle').value)">Random Level</button>
-                <input id="enemy-groups" type="number" min="1" max="6" placeholder="number of enemy groups" value="3">
-                <input id="enemy-shuffle" type="number" min="1" max="10" placeholder="move shuffle amount" value="3">
+				<p>Play Random Levels</p>
+				<div id="random-level-button" class="header-button header-left-button" onclick="openOverlay('random-level')"></div>
+                    
+				<p>Daily Puzzle</p>
+                <div id="daily-button" class="header-button header-left-button" onclick="loadDailyPuzzle()"></div>
+                <button onclick="localStorage.clear(); location.reload()">Clear All Data</button>
 			</div>
 			<div id="header-right-side">
-				<div id="share-button" class="header-right-button" onclick="openOverlay('share')"></div>
-				<div id="tutorial-button" class="header-right-button" onclick="openOverlay('tutorial')"></div>
+				<p>Share Daily</p>
+				<div id="share-button" class="header-button header-right-button" onclick="openOverlay('share')"></div>
+				<p>Tutorial</p>
+				<div id="tutorial-button" class="header-button header-right-button" onclick="openOverlay('tutorial')"></div>
 			</div>
 		</div>
 		<div id="dark-background" onclick="closeOverlay()"></div>
@@ -45,6 +48,16 @@
                     <p id="share-solved">Unsolved/Enemies matched/Enemies unmatched</p>
                     <p id="share-time">Time: XX:XX</p>
                     <button onclick="copyShareToClipboard()">Copy to Clipboard</button>
+                </div>
+				<div id="random-level-overlay">
+					<h1>Random Levels</h1>
+                    <p>Number of enemy groups</p>
+                    <input id="enemy-groups" type="number" min="1" max="6" placeholder="number of enemy groups" value="3">
+                    <p>Number of moves to shuffle</p>
+                    <input id="enemy-shuffle" type="number" min="1" max="10" placeholder="move shuffle amount" value="3">
+                    <br>
+                    <br>
+                    <button onclick="loadRandomLevel()">Generate</button>
                 </div>
 			</div>
 			<button id="close-overlay-button" onclick="closeOverlay();">X</button>

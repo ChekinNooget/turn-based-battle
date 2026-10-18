@@ -43,6 +43,19 @@ document.body.addEventListener("keydown", (e) => {
 	}
 });
 
+function updateMoveCounter(){
+	//TODO: if solved is checked here. we probably want to do a different kind of check than if the player
+	//  just solved it, rather than undoing back to it.
+	var isSolved = checkIfSolved();
+	if (isSolved[0]) {
+		afterPuzzleSolved(isSolved[1]);
+	} else {
+		document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
+		document.getElementById("moves-counter-counter").className = "";
+		setMarioThink();
+	}
+}
+
 function playerUndo() {
 	//undoes the past move by returning to the previous board state, then deleting the latest move.
 	if (playerIsSelecting) {
@@ -56,17 +69,9 @@ function playerUndo() {
 		playerIsSelecting = true;
 	}
 
-	//TODO: if solved is checked here. we probably want to do a different kind of check than if the player
-	//  just solved it, rather than undoing back to it.
-	var isSolved = checkIfSolved();
-	if (isSolved[0]) {
-		afterPuzzleSolved(isSolved[1]);
-	} else {
-		document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
-		document.getElementById("moves-counter-counter").className = "";
-		setMarioThink();
-	}
+    updateMoveCounter();
 
+    saveUserInputs(previousMoves);
 	resetAnimation();
 	updateTargetedTilesCSS();
 }
@@ -91,18 +96,11 @@ function playerConfirm() {
 		if (structuredClone(tilesArray).join(" ") != previousMoves[previousMoves.length - 1].join(" ")) {
 			previousMoves.push(structuredClone(tilesArray));
 
-			//TODO: solve check is here. tweak this eventually to move it somewhere else
-			var isSolved = checkIfSolved();
-			if (isSolved[0]) {
-				afterPuzzleSolved(isSolved[1], true, true);
-			} else {
-				document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
-				document.getElementById("moves-counter-counter").className = "";
-				setMarioThink();
-			}
+			updateMoveCounter();
 		}
 	}
 
+    saveUserInputs(previousMoves);
 	updateTargetedTilesCSS();
 }
 

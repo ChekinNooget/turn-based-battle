@@ -38,10 +38,5 @@ function openOverlay(layout) {
 		allOverlaysDiv.children[i].style.display = "none";
 	}
 
-    
-	if (layout == "tutorial") {
-		document.getElementById("tutorial-overlay").style.display = "block";
-	} else if (layout == "share"){
-		document.getElementById("share-overlay").style.display = "block";
-    }
+    document.getElementById(`${layout}-overlay`).style.display = "block";
 }

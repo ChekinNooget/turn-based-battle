@@ -352,6 +352,7 @@ function checkIfSolved() {
 }
 
 //update every tile with its text
+//actually it uses sprites instead of text now but whatever
 function updateTileText() {
 	for (let i = 0; i < tilesArray.length; i++) {
 		var row = document.getElementsByClassName("row")[i];

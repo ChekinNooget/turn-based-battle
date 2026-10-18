@@ -19,7 +19,7 @@ function generateRandomGrid(seedString = "iltg", numberOfEnemyGroups = 3, number
 	// Four 32-bit component hashes provide the seed for sfc32.
 	var rand = sfc32(seed[0], seed[1], seed[2], seed[3]);
 
-    //the array we're gonna base things off of
+	//the array we're gonna base things off of
 	var newTilesArray = [
 		["", "", "", "", "", "", "", "", "", "", "", ""], //innermost ring
 		["", "", "", "", "", "", "", "", "", "", "", ""],
@@ -27,10 +27,10 @@ function generateRandomGrid(seedString = "iltg", numberOfEnemyGroups = 3, number
 		["", "", "", "", "", "", "", "", "", "", "", ""], //outermost ring
 	];
 
-    //use this variable for some random things (to keep seeded stuff consistent)
+	//use this variable for some random things (to keep seeded stuff consistent)
 	var tempRandVal = rand();
 
-    //create # amount of enemy groups
+	//create # amount of enemy groups
 	for (let i = 0; i < numberOfEnemyGroups; i++) {
 		//create a line
 		if (tempRandVal >= 0.5) {
@@ -61,25 +61,17 @@ function generateRandomGrid(seedString = "iltg", numberOfEnemyGroups = 3, number
 			}
 		}
 
-        //reset random
+		//reset random
 		tempRandVal = rand();
 	}
 
-    //send the array off to get shuffled
+	//send the array off to get shuffled
 	newTilesArray = shuffleRandomGrid(rand, newTilesArray, numberOfShuffleMoves);
 	setTilesArrayTo(newTilesArray);
 
-    //TODO: if solved is checked here.
-    //TODO REMOVE THIS AT SOME POINT!!!!!!!!1
+	//TODO: if solved is checked here.
 	setTimeout(function () {
-		var isSolved = checkIfSolved();
-		if (isSolved[0]) {
-			afterPuzzleSolved(isSolved[1]);
-		} else {
-			document.getElementById("moves-counter-counter").textContent = "x" + (previousMoves.length - 1).toString();
-			document.getElementById("moves-counter-counter").className = "";
-			setMarioThink();
-		}
+		updateMoveCounter();
 	}, 1);
 
 	return newTilesArray;
@@ -89,6 +81,7 @@ function generateRandomGrid(seedString = "iltg", numberOfEnemyGroups = 3, number
 function setTilesArrayTo(newArray) {
 	tilesArray = structuredClone(newArray);
 	previousMoves = [structuredClone(newArray)];
+
 	updateTileText();
 	resetAnimation();
 }
@@ -97,14 +90,14 @@ function setTilesArrayTo(newArray) {
 function shuffleRandomGrid(rand, arrayToShuffle, numberOfShuffleMoves = 3) {
 	//true is rotation, false is sliding
 	var previousMoveType = true;
-    //what ring/column was used in the previous shuffle. this way we don't shuffle the same one twice in a row
-    //set at some high number to initialize. (this was picked randomly trust)
+	//what ring/column was used in the previous shuffle. this way we don't shuffle the same one twice in a row
+	//set at some high number to initialize. (this was picked randomly trust)
 	var previousMoveIndex = 1434;
 
-    //repeat this several times, for each time we want to do another move
+	//repeat this several times, for each time we want to do another move
 	for (let shuffleIndex = 0; shuffleIndex < numberOfShuffleMoves; shuffleIndex++) {
-        //keep track of which rings and columns are valid to shuffle.
-        //we don't want to move around an empty ring to have nothing happen
+		//keep track of which rings and columns are valid to shuffle.
+		//we don't want to move around an empty ring to have nothing happen
 		var validRings = [];
 		var validColumns = [];
 
@@ -126,7 +119,7 @@ function shuffleRandomGrid(rand, arrayToShuffle, numberOfShuffleMoves = 3) {
 			}
 		}
 
-        //now we should have every non-empty ring/column stored.
+		//now we should have every non-empty ring/column stored.
 
 		//remove the index that was used in the previous shuffle, if applicable.
 		if (previousMoveType) {
@@ -139,17 +132,17 @@ function shuffleRandomGrid(rand, arrayToShuffle, numberOfShuffleMoves = 3) {
 			});
 		}
 
-        //ready to randomize!
-        //pick a random index from either validRings or validColumns
+		//ready to randomize!
+		//pick a random index from either validRings or validColumns
 		var tempRandVal;
 		tempRandVal = Math.floor(rand() * (validRings.length + validColumns.length));
 
-        //the number of times we want to move a certain row or column within the move
+		//the number of times we want to move a certain row or column within the move
 		var tempRandomShiftVal;
 
-        //if we want to pick from validRings
+		//if we want to pick from validRings
 		if (tempRandVal < validRings.length) {
-            //rotate a ring a random amount from 1-11 (0 and 12 don't do anything)
+			//rotate a ring a random amount from 1-11 (0 and 12 don't do anything)
 			tempRandomShiftVal = Math.floor(rand() * 11 + 1);
 			for (let i = 0; i < tempRandomShiftVal; i++) {
 				rotateRing(validRings[tempRandVal], true, false, arrayToShuffle);
@@ -158,8 +151,8 @@ function shuffleRandomGrid(rand, arrayToShuffle, numberOfShuffleMoves = 3) {
 			previousMoveType = true;
 			previousMoveIndex = validRings[tempRandVal];
 		} else //otherwise pick from validColumns
-        {
-            //shift a column a random amount from 1 to 7.
+		{
+			//shift a column a random amount from 1 to 7.
 			tempRandomShiftVal = Math.floor(rand() * 7 + 1);
 			for (let i = 0; i < tempRandomShiftVal; i++) {
 				shiftColumn(validColumns[tempRandVal - validRings.length], true, false, arrayToShuffle);
@@ -169,8 +162,8 @@ function shuffleRandomGrid(rand, arrayToShuffle, numberOfShuffleMoves = 3) {
 			previousMoveIndex = validColumns[tempRandVal - validRings.length];
 		}
 
-        //maybe sometime fix logic for a 4x column shift not doing anything when there's only one column on the board anyway? sometimes you just win automatically when doing 1 enemy group + 1 shuffle move setting
-        //eh it doesn't matter
+		//maybe sometime fix logic for a 4x column shift not doing anything when there's only one column on the board anyway? sometimes you just win automatically when doing 1 enemy group + 1 shuffle move setting
+		//eh it doesn't matter
 	}
 
 	return arrayToShuffle;
