@@ -99,7 +99,8 @@ function loadDailyPuzzle() {
 	const urlParams = new URLSearchParams(window.location.search);
 	urlParams.delete("random");
 	//no idea if this even is valid but it works lol
-	window.history.replaceState(null, null, "/");
+    //ok that was catastrophic, let's see if this fixes it
+	window.history.replaceState(null, null, "?");
 
 	if (localStorage.getItem("previous_moves_daily") != null) {
 		loadUserInputs(true);
