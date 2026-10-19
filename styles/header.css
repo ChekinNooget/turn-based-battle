@@ -50,14 +50,14 @@
 }
 
 #tutorial-button {
-	background-image: url(../assets/sprites/ui/PMTOK_question_mark_indicator.png);
+	background-image: url(../assets/sprites/ui/header_icons/PMTOK_question_mark_indicator.png);
 }
 #share-button {
-	background-image: url(../assets/sprites/ui/PMTOK_fax_machine_render.png);
+	background-image: url(../assets/sprites/ui/header_icons/PMTOK_fax_machine_render.png);
 }
 #random-level-button {
-	background-image: url(../assets/sprites/ui/Battle_Lab_Toad_PMTOK_sprite.png);
+	background-image: url(../assets/sprites/ui/header_icons/Battle_Lab_Toad_PMTOK_sprite.png);
 }
 #daily-button {
-	background-image: url(../assets/sprites/ui/PMTOK_Panel_Action_+1.png);
+	background-image: url(../assets/sprites/ui/header_icons/PMTOK_Panel_Action_+1.png);
 }

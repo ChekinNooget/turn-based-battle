@@ -40,3 +40,12 @@ function openOverlay(layout) {
 
     document.getElementById(`${layout}-overlay`).style.display = "block";
 }
+
+function incrementInputField(fieldID, amount = 1){
+    var field = document.getElementById(fieldID);
+    field.value = clamp(parseInt(field.value) + parseInt(amount), field.min, field.max);
+}
+
+function clamp(number, min, max) {
+  return Math.max(min, Math.min(number, max));
+}

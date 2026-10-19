@@ -165,13 +165,13 @@ function setupStart() {
 		if (localStorage.getItem("previous_moves") != null) {
 			//using json stringify might be a terrible idea but idc
 			if (JSON.stringify(JSON.parse(localStorage.getItem("previous_moves"))[0]) === JSON.stringify(tilesArray)) {
-				loadUserInputs(false);
+				setTimeout(function() {loadUserInputs(false)}, 1);
 			}
 		}
 	} else //otherwise do daily level
 	{
 		if (localStorage.getItem("previous_moves_daily") != null) {
-			loadUserInputs(true);
+			setTimeout(function() {loadUserInputs(true)}, 1);
 		} else {
 			generateRandomGrid(`${date.getFullYear()}/${date.getMonth()}/${date.getDate()}`, 3, 3);
 		}

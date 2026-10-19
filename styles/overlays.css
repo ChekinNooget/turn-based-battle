@@ -15,12 +15,10 @@
 }
 
 #overlay {
-	position: fixed;
-	left: 50%;
-	top: 50%;
-
-	margin-left: -35vw;
-	margin-top: -40vh;
+    
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, 0);
 
 	padding: 30px;
 
@@ -47,9 +45,65 @@
 	background-color: transparent;
 	font-family: SuperMarioTitle;
 	font-size: 3em;
-    cursor: pointer;
-    
+	cursor: pointer;
 }
+
+/*random level generator*/
+
+#random-level-overlay {
+	text-align: center;
+}
+
+#random-level-overlay p {
+    font-size: 1.5em;
+}
+
+#random-level-overlay .input-container {
+	display: flex;
+	flex-direction: row;
+
+    justify-content: center;
+}
+
+#random-level-overlay .input-container input {
+    padding-right: 10px;
+}
+
+#random-level-overlay .increment-container {
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	justify-content: center;
+}
+
+#random-level-overlay .increment-container > button {
+	height: 50%;
+	width: 36px;
+
+	background-image: url("../assets/sprites/ui/PMTOK_Panel_Starting_Position_Arrow.png");
+	background-size: cover;
+	background-position: center;
+	background-color: transparent;
+
+	border: 0px;
+}
+
+#random-level-overlay .increment-container > button:nth-child(2) {
+	transform: rotate(180deg);
+}
+
+#random-level-overlay #random-generate-button{
+    font-family: SuperMarioTitle;
+    font-size: 4em;
+    
+    border: 5px black solid;
+
+    line-height: 70%;
+
+    padding: 10px;
+}
+
+/*moving on*/
 
 #moves-counter {
 	position: fixed;

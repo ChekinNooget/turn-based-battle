@@ -16,10 +16,10 @@
 			<div id="header-left-side">
 				<p>Play Random Levels</p>
 				<div id="random-level-button" class="header-button header-left-button" onclick="openOverlay('random-level')"></div>
-                    
+
 				<p>Daily Puzzle</p>
-                <div id="daily-button" class="header-button header-left-button" onclick="loadDailyPuzzle()"></div>
-                <button onclick="localStorage.clear(); location.reload()">Clear All Data</button>
+				<div id="daily-button" class="header-button header-left-button" onclick="loadDailyPuzzle()"></div>
+				<button onclick="localStorage.clear(); location.reload()">Clear All Data</button>
 			</div>
 			<div id="header-right-side">
 				<p>Share Daily</p>
@@ -34,9 +34,11 @@
 				<div id="tutorial-overlay">
 					<h1>Line them up!</h1>
 					<p>The goal of each puzzle is to create lineups that sort the enemies into two kinds of groups: <span class="bold">squares, or lines</span>.</p>
-					<img src="assets/sprites/tutorial/temp square screenshot.png" />
-					<img src="assets/sprites/tutorial/temp line screenshot.png" />
-					<p>Note: Enemies can't be a part of multiple groups at once.</p>
+					<div style="display: flex; flex-direction: row; justify-content: space-around;">
+						<img style="width: 256px;" src="assets/sprites/tutorial/square_enemies.png" />
+						<img style="width: 256px;" src="assets/sprites/tutorial/line_enemies.png" />
+					</div>
+					<p>Enemies can't be a part of multiple groups at once.</p>
 					<p>Move enemies around by <span class="bold">rotating rings</span>, or by <span class="bold">sliding rows.</span></p>
 					<!--Note: in the code we called them "shifting columns," but apparently in-game it's called "sliding rows." Oops. We also called "rotating rings" "rotating rows" so hopefully that isn't confusing.-->
 					<p>Switch between moving rings or rows by pressing <span class="bold">X</span>. Once you've got a ring or row you'd like to change, press <span class="bold">Space</span> to select it. After that, use your <span class="bold">Arrow Keys</span> to move them around. Press <span class="bold">Space</span> again to confirm your move, and you're done! You can also press <span class="bold">Z</span> to undo.</p>
@@ -44,21 +46,34 @@
 				</div>
 				<div id="share-overlay">
 					<h1>Share your score</h1>
-                    <p id="share-moves">Moves taken: XX</p>
-                    <p id="share-solved">Unsolved/Enemies matched/Enemies unmatched</p>
-                    <p id="share-time">Time: XX:XX</p>
-                    <button onclick="copyShareToClipboard()">Copy to Clipboard</button>
-                </div>
+					<p id="share-moves">Moves taken: XX</p>
+					<p id="share-solved">Unsolved/Enemies matched/Enemies unmatched</p>
+					<p id="share-time">Time: XX:XX</p>
+					<button onclick="copyShareToClipboard()">Copy to Clipboard</button>
+				</div>
 				<div id="random-level-overlay">
 					<h1>Random Levels</h1>
-                    <p>Number of enemy groups</p>
-                    <input id="enemy-groups" type="number" min="1" max="6" placeholder="number of enemy groups" value="3">
-                    <p>Number of moves to shuffle</p>
-                    <input id="enemy-shuffle" type="number" min="1" max="10" placeholder="move shuffle amount" value="3">
-                    <br>
-                    <br>
-                    <button onclick="loadRandomLevel()">Generate</button>
-                </div>
+					<p>Number of enemy groups</p>
+					<div id="enemy-groups-input-container" class="input-container">
+						<input id="enemy-groups" type="number" min="1" max="6" placeholder="number of enemy groups" value="3" />
+                        <div id="enemy-groups-increment-container" class="increment-container">
+                            <button onclick="incrementInputField('enemy-groups', 1)"></button>
+                            <button onclick="incrementInputField('enemy-groups', -1)"></button>
+                        </div>
+                    </div>
+
+					<p>Number of moves to shuffle</p>
+					<div id="enemy-shuffle-input-container" class="input-container">
+						<input id="enemy-shuffle" type="number" min="1" max="10" placeholder="move shuffle amount" value="3" />
+                        <div id="enemy-shuffle-increment-container" class="increment-container">
+                            <button onclick="incrementInputField('enemy-shuffle', 1)"></button>
+                            <button onclick="incrementInputField('enemy-shuffle', -1)"></button>
+                        </div>
+					</div>
+					<br />
+					<br />
+					<button id="random-generate-button" onclick="loadRandomLevel()">Go!</button>
+				</div>
 			</div>
 			<button id="close-overlay-button" onclick="closeOverlay();">X</button>
 		</div>
